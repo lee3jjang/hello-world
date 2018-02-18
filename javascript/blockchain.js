@@ -65,3 +65,7 @@ coin.chain[1].data = 'Forth block!';
 console.log(coin.isChainValid());
 console.log('before : ' + coin.chain[1].calculateHash());
 console.log('after : ' + coin.chain[1].hash);
+
+console.log('------------------------------------------------------------------------');
+console.log(coin);
+
