@@ -1,0 +1,10 @@
+require("forecast")
+rm(list=ls())
+set.seed(18)
+
+x <- seq(0,100,0.1)
+y <- 4*x-2+rnorm(length(x),sd=100)
+y.ts = ts(y)
+plot(y.ts, xlab="time", main="White noice", ylab="value")
+model <- ma(y,order=20,centre=FALSE)
+plot(model)
