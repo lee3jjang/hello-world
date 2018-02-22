@@ -1,18 +1,32 @@
 import RPi.GPIO as GPIO
 import time
 
-AIN1 = 12
-ENA = 6
-PA = 50
+leftF = 13
+leftB = 12
+rightF = 21
+rightB = 20
+enL = 6
+enR = 26
+#Ducty Cycle
+pL = 50
+pR = 50
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarining(False)
-GPIO.setup(AIN1,0)
-GPIO.setup(ENA,0)
-PWMA = GPIO.PWM(ENA,500)
-PWMA.start(PA)
-PWMA.ChangeDutyCycle(50)
-GPIO.output(AIN1,1)
 
+GPIO.setup(leftF,GPIO.OUT)
+GPIO.setup(rightF,GPIO.OUT)
+GPIO.setup(enL,GPIO.OUT)
+GPIO.setup(enR,GPIO.OUT)
+# Pulsw Width Modulation(frequency = 500Hz)
+PWML = GPIO.PWM(enL,500)
+PWMR = GPIO.PWM(enR,500)
+PWML.start(pL)
+PWMR.start(pR)
+GPIO.output(leftF,GPIO.HIGH)
+GPIO.output(rightF,GPIO.HIGH)
+#PWML.ChangeDutyCycle(0)
+#PWML.ChangeDutyCycle(0)
 
 if __name__=='__main__':
   
