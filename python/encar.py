@@ -24,7 +24,12 @@ for i in range(1,21):
     path = ' > '.join(path)
     
     result = driver.find_element_by_css_selector(path)
-    row = result.text.split('\n')
+    row = '\t'.join(result.text.split('\n'))
     data.append(row)
+    
 
-print(data)
+with open('data.txt','w') as f:
+    for line in data:
+        f.write(line)
+        f.write('\n')
+        
