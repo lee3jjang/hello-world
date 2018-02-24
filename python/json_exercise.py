@@ -12,13 +12,13 @@ def queryStr(url,query):
     return (full_url)
 ##########################################################################################
 url = r'http://fisis.fss.or.kr/openapi/statisticsInfoSearch.json?'
-query = {'lang' :'kr',
-         'auth' : '7774090942ede970746a7cd9b2e10577',
-         'financeCd' : '0010927','listNo':'SA001',
-         'accountCd':'A11',
-         'term':'Q',
-         'startBaseMm':'201306',
-         'endBaseMm':'201306'}
+query = {'lang' :'kr',                                              # 언어
+         'auth' : '7774090942ede970746a7cd9b2e10577',               # 인증키
+         'financeCd' : '0010927','listNo':'SA001',                  # 금융회사코드
+         'accountCd':'A11',                                         # 계정항목코드
+         'term':'Q',                                                # 시기구분(Y:연도, H:반기, Q:분기)
+         'startBaseMm':'201306',                                    # 검색시작년월
+         'endBaseMm':'201306'}                                      # 검색종료년월
          
 url = queryStr(url,query)
 res = req.get(url)
