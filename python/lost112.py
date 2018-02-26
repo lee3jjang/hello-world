@@ -23,5 +23,6 @@ for i in range(1,10):
     data = np.append(data,temp,axis=0)
     
 df = pd.DataFrame(data)
+df.columns = ['관리번호','분실물명','분실장소','분실일자']
 writer = pd.ExcelWriter('lost.xlsx')
 df.to_excel(writer,'sheet1')
