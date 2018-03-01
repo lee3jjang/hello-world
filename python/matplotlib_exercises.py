@@ -1,6 +1,5 @@
 __author__ = 'lee3jjang@naver.com'
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 import math
 
@@ -22,7 +21,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 
 x1 = [1,3,5,7,9]
@@ -51,7 +49,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 from random import shuffle
 
@@ -66,7 +63,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -86,7 +82,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -106,7 +101,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 import math
 
@@ -137,7 +131,6 @@ plt.show()
 
 ##################################################################
 
-%matplotlib inline
 import matplotlib.pyplot as plt
 import math
 
