@@ -10,4 +10,5 @@ class sangjin():
 
 
 x = sangjin()
-getattr(x,"crawl")()
+if hasattr(x,"crawl"):
+    getattr(x,"crawl")()
