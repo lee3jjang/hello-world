@@ -1,8 +1,8 @@
-%matplotlib
+
 import numpy as np
 import pandas as pd
 
-ver = pd.read_csv("./python/train.csv")
+ver = pd.read_csv("train.csv")
 
 pd.set_option('display.max_columns',6)
 ver.head(3)
