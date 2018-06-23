@@ -92,3 +92,49 @@ select * from ex2_10_1;
 select * from ex2_9;
 create or replace view 연습2_9 as select * from ex2_9;
 select * from 연습2_9;
+
+-- 인덱스 생성/삭제
+create unique index ex2_10_ix01 on ex2_9(gender);
+select index_name, index_type, table_name, uniqueness from user_indexes where table_name = 'EX2_9';
+drop index ex2_10_ix01;
+
+-- 시노님 생성/삭제
+create or replace synonym syn_channel for channels;
+
+select * from channels;
+select * from syn_channel;
+
+alter user hr identified by xy123236 account unlock;
+grant select on employees to lee3jjang;
+grant select on syn_channel to public;
+drop synonym syn_channel;
+
+-- 시퀀스 생성
+create sequence my_seq1
+increment by 1
+start with 1
+minvalue 1
+maxvalue 1000
+nocycle
+nocache;
+
+select * from ex2_9;
+delete ex2_9;
+insert into ex2_9 (num1) values (my_seq1.nextval);
+select my_seq1.currval from dual;
+drop sequence my_seq1;
+
+-- 파티션 생성
+create table sales(
+    prod_id number(6,0) not null,
+    cust_id number(6,0) not null,
+    sales_month varchar2(6),
+    amount_sold number(10,2),
+    create_date date default sysdate,
+    update_date date default sysdate    
+)
+partition by range(sales_month)
+(
+    partition sales_q1_1998 values less than ('199804') tablespace oratest,
+    partition sales_q2_1998 values less than ('199807') tablespace oratest
+);
