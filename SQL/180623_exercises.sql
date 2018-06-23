@@ -138,3 +138,48 @@ partition by range(sales_month)
     partition sales_q1_1998 values less than ('199804') tablespace oratest,
     partition sales_q2_1998 values less than ('199807') tablespace oratest
 );
+
+-- update
+select * from ex2_9;
+update ex2_9
+set num1 = 1, gender = 'f' where rownum = 1;
+
+-- merge
+create table ex3_3 (
+    employee_id number,
+    bonus number default 0);
+    
+
+insert into ex3_3 (employee_id)
+select employee_id from employees where employee_id like '10%';
+select * from ex3_3;
+select employee_id, manager_id, salary, salary*0.01 from employees where employee_id in (select employee_id from ex3_3);
+select employee_id, manager_id, salary, salary*0.01 from employees where employee_id not in (select employee_id from ex3_3) and manager_id = 101;
+
+merge into ex3_3 d
+    using (select employee_id, salary, manager_id from employees where manager_id = 101) b
+    on (d.employee_id = b.employee_id)
+    when matched then
+        update set d.bonus = d.bounus + b.salary*0.01
+        delete where (b.employee_id = 108)
+    when not matched then
+        insert (d.employee_id, d.BONUS) values (b.employee_id, b.salary*0.001) where (b.salary < 8000);
+        
+select * from ex3_3;
+
+desc ex3_3;
+
+select partition_name from user_tab_partitions;
+select * from sales;
+
+-- commit
+create table ex3_4 (
+    employee_id number);
+    
+insert into ex3_4 values (200);
+select * from ex3_4;
+rollback;
+commit;
+
+select rowid from ex3_4;
+
