@@ -1,7 +1,5 @@
-package economic_scenario_generator;
-import java.util.Arrays;
-
 public class Matrix {
+	// Identity matrix
 	public static double[][] identity(int n){
 		double[][] A = new double[n][n];
 		for(int i=0; i<n; i++)
@@ -9,6 +7,7 @@ public class Matrix {
 		return A;
 	}
 	
+	// Inner product
 	public static double dot(double[] u, double[] v) {
 		if (u.length != v.length) throw new RuntimeException("유요하지 않은 연산입니다.");
 		double sum = 0.0;
@@ -17,6 +16,7 @@ public class Matrix {
 		return sum;
 	}
 	
+	// Transpose of matrix
 	public static double[][] transpose(double[][] A) {
 		int m = A.length;
 		int n = A[0].length;
@@ -27,10 +27,61 @@ public class Matrix {
 		return B;
 		
 	}
+	// Matrix addition
+	public static double[][] add(double[][] A, double[][] B) {
+		int m = A.length;
+		int n = A[0].length;
+		double[][] C = new double[m][n];
+		for (int i=0; i<m; i++)
+			for (int j=0; j<n; j++)
+				C[i][j] = A[i][j] + B[i][j];
+		return C;
+	}
 	
+	// Matrix subtraction
+	public static double[][] subtract(double[][] A, double[][] B) {
+		int m = A.length;
+		int n = A[0].length;
+		double[][] C = new double[m][n];
+		for (int i=0; i<m; i++)
+			for (int j=0; j<n; j++)
+				C[i][j] = A[i][j] - B[i][j]; 
+		return C;
+	}
+	
+	
+	// Matrix multiplication
+	public static double[][] multiply(double[][] A, double[][] B) {
+		int m = A.length;
+		int n = A[0].length;
+		int r = B.length;
+		int s = B[0].length;
+		if (n != r) throw new RuntimeException("유효하지 않은 연산입니다.");
+		double[][] C = new double[m][s];
+		for (int i=0; i<m; i++)
+			for (int j=0; j<s; j++)
+				for (int k=0; k<r; k++)
+					C[i][j] += A[i][k] * B[k][j];
+		return C;
+	}
+	
+	// Matrix-vector multiplication
+		public static double[] multiply(double[][] A, double[] v) {
+			int m = A.length;
+			int n = A[0].length;
+			if (n != v.length) throw new RuntimeException("유효하지 않은 연산입니다.");
+			double[] w = new double[m];
+			for (int i = 0; i < n; i++)
+	            for (int j = 0; j < m; j++)
+	                w[j] += A[i][j] * v[j];
+			return w;
+		}
+	
+	// Print matrix
 	public static void print(double[][] A) {
 		int m = A.length;
 		int n = A[0].length;
+		System.out.println("===print===");
 		for (int i=0; i<m; i++) {
 			for (int j=0; j<n; j++) {
 				System.out.print(A[i][j]+" ");
@@ -39,6 +90,15 @@ public class Matrix {
 		}
 	}
 	
+	// Print vector
+	public static void print(double[] v) {
+		int m = v.length;
+		System.out.println("===print===");
+		for (int i=0; i<m; i++)
+			System.out.print(v[i]+" ");
+	}
+	
+	// Main 
 	public static void main(String args[]) {
 		double[][] A = Matrix.identity(3);
 		System.out.println(A.length);
@@ -50,8 +110,15 @@ public class Matrix {
 		
 		double[][] B = {{1,4,2}, {-4,2,0}};
 		double[][] tB = Matrix.transpose(B);
-		Matrix.print(tB);
+		Matrix.print(A);
 		
+		double[][] C;
+		C = Matrix.multiply(tB, B);
+		Matrix.print(C);
+		
+		double[] w;
+		w = Matrix.multiply(A, x);
+		Matrix.print(w);
 	}
 	
 }
