@@ -53,7 +53,7 @@ public class SmithWilson {
 			else
 				wilson = Math.exp(-this.UFR*u-(this.alpha+this.UFR)*t)*(this.alpha*this.UFR*this.UFR*u*Math.exp(this.alpha*t)-(this.alpha+this.UFR)*(this.alpha+this.UFR)*Math.sinh(this.alpha*u));
 		} else {
-			throw new RuntimeException("À¯È¿ÇÏÁö ¾ÊÀº Â÷¼öÀÔ´Ï´Ù.");
+			throw new RuntimeException("ìœ íš¨í•˜ì§€ ì•Šì€ ì°¨ìˆ˜ì…ë‹ˆë‹¤.");
 		}
 		return wilson;
 	}
@@ -81,7 +81,7 @@ public class SmithWilson {
 		else if (order==1)
 			forward = 1/bond(t,0)*(-bond(t,1)*bond(t,1)/bond(t,0)+bond(t,2));
 		else
-			throw new RuntimeException("À¯È¿ÇÏÁö ¾ÊÀº Â÷¼öÀÔ´Ï´Ù.");
+			throw new RuntimeException("ìœ íš¨í•˜ì§€ ì•Šì€ ì°¨ìˆ˜ì…ë‹ˆë‹¤.");
 		return forward;
 	}
 	
@@ -106,6 +106,6 @@ public class SmithWilson {
 		System.out.println(sw.Wilson(4, 2, 1));
 		System.out.println(sw.spot(10));
 		System.out.println(sw.forward(110,0));
-		System.out.println(sw.fswaprate(1,1,0.25));
+		System.out.println(sw.fswaprate(1,3,0.25));
 	}
 }
