@@ -1,4 +1,5 @@
 public class Matrix {
+	
 	// Identity matrix
 	public static double[][] identity(int n){
 		double[][] A = new double[n][n];
@@ -27,6 +28,7 @@ public class Matrix {
 		return B;
 		
 	}
+	
 	// Matrix addition
 	public static double[][] add(double[][] A, double[][] B) {
 		int m = A.length;
@@ -48,7 +50,6 @@ public class Matrix {
 				C[i][j] = A[i][j] - B[i][j]; 
 		return C;
 	}
-	
 	
 	// Matrix multiplication
 	public static double[][] multiply(double[][] A, double[][] B) {
@@ -75,6 +76,30 @@ public class Matrix {
 	            for (int j = 0; j < m; j++)
 	                w[j] += A[i][j] * v[j];
 			return w;
+		}
+		
+	// Gauss-Seidel method(미완성)
+		public static double[] GaussSeidel(double[][] A, double[] b) {
+			int n = b.length;
+			double[] x = new double[n];
+			//double iter = 100;
+			double term1, term2;
+
+			// Initialization
+			for (int i=0; i<n; i++)
+				x[i] = 0;
+			
+			// Next
+			for (int i=0; i<n; i++) {
+				term1 = 0;
+				term2 = 0;
+				for (int j=0; j<i-1; j++)
+					term1 += A[i][j]*x[j];
+				for (int j=i+1; i<n; i++)
+					term2 += A[i][j]*x[j];
+				x[i] = 1/A[i][i]*(b[i] - term1 - term2);
+			}
+			return x;
 		}
 	
 	// Print matrix
@@ -119,6 +144,10 @@ public class Matrix {
 		double[] w;
 		w = Matrix.multiply(A, x);
 		Matrix.print(w);
+		
+		double[] z;
+		z = Matrix.GaussSeidel(C, w);
+		Matrix.print(x);
 	}
 	
 }
