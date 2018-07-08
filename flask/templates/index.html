@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="{{url_for('static', filename='hello.js')}}"></script>
+    </head>
+    <body>
+        <input type="button" onclick="sayHello()" value="Say Hello" />
+        <form action="/setcookie" method="POST">
+            <p><h3>Enter user ID</h3></p>
+            <p><input type="text" name="nm"/></p>
+            <p><input type="submit" value="login"/></p>
+        </form>
+    </body>
+</html>
