@@ -15,7 +15,7 @@ class objFunc {
 		else if (order == 2)
 			y = -2*Math.sin(x) - 0.2;
 		else 
-			throw new RuntimeException("À¯È¿ÇÏÁö ¾ÊÀº Â÷¼öÀÔ´Ï´Ù.");
+			throw new RuntimeException("ìœ íš¨í•˜ì§€ ì•Šì€ ì°¨ìˆ˜ì…ë‹ˆë‹¤.");
 		return y;
 	}
 }
