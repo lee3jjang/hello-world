@@ -25,9 +25,19 @@ public class Matrix {
 		System.out.println();
 	}
 	
+	// Norm of vector
+	public static double norm(double[] v, double p) {
+		double x = 0;
+		for (int i=0;i<v.length; i++)
+			x += Math.pow(v[i], p);
+		x = Math.pow(x, 1/p);
+		return x;
+		
+	}
+	
 	// Inner product
 	public static double dot(double[] u, double[] v) {
-		if (u.length != v.length) throw new RuntimeException("유요하지 않은 연산입니다.");
+		if (u.length != v.length) throw new RuntimeException("유효하지 않은 연산입니다.");
 		double x = 0;
 		for (int i=0; i<u.length; i++)
 			x += u[i]*v[i];
@@ -126,6 +136,24 @@ public class Matrix {
 				for (int k=0; k<r; k++)
 					C[i][j] += A[i][k] * B[k][j];
 		return C;
+	}
+	
+	// Extract diagonal component of matrix
+	public static double[][] diag(double[][] A){
+		int n = A.length;
+		double[][] B = new double[n][n];
+		for (int i=0;i<n;i++)
+			B[i][i] = A[i][i];
+		return B;
+	}
+	
+	// Diagonal matrix of vector
+	public static double[][] diag(double[] v){
+		int n = v.length;
+		double[][] B = new double[n][n];
+		for (int i=0;i<n;i++)
+			B[i][i] = v[i];
+		return B;
 	}
 	
 	// Matrix-vector multiplication
@@ -241,6 +269,7 @@ public class Matrix {
 		double D = determinant(A);
 		double[] x = new double[n];
 		double[][] B;
+		
 		for(int j=0; j<n; j++) {
 			B = copy(A);
 			for(int i=0; i<n; i++)
@@ -248,6 +277,16 @@ public class Matrix {
 			x[j] = determinant(B)/D;
 		}
 		return x;
+	}
+	
+	// Vector copy
+	public static double[] copy(double[] v) {
+		int n = v.length;
+		double[] w = new double[n];
+		
+		for (int i=0; i<n; i++)
+			w[i] = v[i];
+		return w;
 	}
 	
 	// Matrix copy
@@ -263,11 +302,28 @@ public class Matrix {
 		return B;
 	}
 	
+	// Insert a column of ones on the left
+	public static double[][] insert_one(double[][] A){
+		int m = A.length;
+		int n = A[0].length;
+		double[][] B = new double[m][n+1];
+		for (int i=0; i<m; i++) {
+			B[i][0] = 1;
+			for (int j=0; j<n; j++)
+				B[i][j+1] = A[i][j];
+		}
+		return B;
+	}
+	
 	// Main
 	public static void main(String args[]) {
 		double[][] A = {{0.3,0.52,1,-0.4},{0.5,1,1.9,2.1},{0.1,0.3,0.5,0.33},{-0.5,0.7,0.54,0}};
 		double[][] B = Matrix.inverse(A);
 	    Matrix.print(A);
 	    Matrix.print(B);
+	    double[] v = {1,2,3};
+	    Matrix.print(diag(v));
+	    Matrix.print(diag(A));
+	    Matrix.print(insert_one(A));
 	}
 }
