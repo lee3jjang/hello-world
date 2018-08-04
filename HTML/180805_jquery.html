@@ -1,0 +1,32 @@
+﻿<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+  var x = 2000; 
+  var text = "slow";
+  $(document).ready(function(){
+    $("#hide").click(function(){$("p").hide();});
+    $("#hide2").click(function(){$("p").hide(1000);});
+    $("#show").click(function(){$("p").show();});
+    $("#tog").click(function(){$("p").toggle(1000);});
+    $("button#fdi").click(function(){$("#momo").fadeIn(x);});
+    $("button#fdo").click(function(){
+      $("#momo").fadeOut(text, alert("fadeout의 콜백함수가 먼저 호출되고"));
+      alert("이게 나중에 호출되네");
+      });
+    $("button#fdt").click(function(){$("#momo").fadeTo(text, 0.15, function(){alert("페이드투 실행완료!");});});
+  });
+</script>
+
+<p style="width:80px;height:30px;background-color:red;">테스트1</p>
+<p style="width:80px;height:30px;background-color:green;">테스트2</p>
+<p id="momo" style="width:80px;height:30px;background-color:blue;display:none;">테스트3</p>
+
+<button id="hide">사라집니다</button>
+<button id="hide2">느린속도로 사라집니다</button>
+<button id="show">생깁니다</button>
+<button id="tog">사라지고 생깁니다</button>
+<br><br>
+<button id="fdi">페이드인</button>
+<button id="fdo">페이드아웃</button>
+<button id="fdt">페이드투</button>
+  
