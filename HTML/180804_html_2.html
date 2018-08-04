@@ -1,0 +1,35 @@
+<button type="button" onclick="document.getElementById('demo').innerHTML = Date()">
+    시간 및 날짜
+</button>
+<br>
+<button type="button" onclick="document.getElementById('demo2').style.fontSize = '35px';">
+    키우기
+</button>
+<button type="button" onclick="document.getElementById('demo2').style.fontSize = '10px';">
+    줄이기
+</button>
+
+<button type="button" onclick="document.getElementById('demo2').style.display ='none'">
+    없애기
+</button>
+
+<button type="button" onclick="document.getElementById('demo2').style.display ='block'">
+    보이기
+</button>
+
+<p id="demo"></p>
+<p id="demo2">글씨입니다</p>
+<p id="demo3"></p>
+
+<script type="text/javascript">
+    document.getElementById("demo3").innerHTML = "나의 첫번째 자바스크립트"
+    function myFunc(){
+        document.getElementById("demo3").innerHTML = "myFunc 함수가 호출되었습니다!";
+    }
+</script>
+<p id="demo4"></p>
+<script src="js/180804_js.js"></script>
+<button type="button" onclick="myFunc()">눌러보세요</button>
+
+<button type="button" onclick="함수임()">눌러볼래</button>
+    
