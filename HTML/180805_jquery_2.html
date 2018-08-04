@@ -1,0 +1,35 @@
+﻿<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $("#mod").css("color", "red")
+      .slideUp(2000)
+      .slideDown(3000);
+  });
+    
+  $("#btn2").click(function(){
+    var x = $("#mod");
+    x.animate({
+      fontSize:'+=2em',
+      opacity: '0.5',
+      height: '+=10px',
+      width: '+=10px'
+    }, "slow");
+  });
+
+  $("#btn3").click(function(){
+    $("#mod").stop();
+  });
+
+});
+
+</script>
+
+
+<p id="mod" style="background-color:red;width:100px;height:100px">화면</p>
+<button id="btn1">버튼1</button><br>
+<button id="btn2">버튼2</button>
+<button id="btn3">멈춤</button>
+
+
