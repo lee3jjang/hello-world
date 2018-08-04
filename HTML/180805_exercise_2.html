@@ -1,0 +1,78 @@
+
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+<div id="map" style="width:400px;height:400px;">여기에 구글지도 넣을거임</div>
+<div id="result"></div>
+
+<style>
+    #div1 {
+        width: 350px;
+        height: 70px;
+        padding: 10px;
+        border: 1px solid #aaaaaa;
+    }
+</style>
+<script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    ctx.moveTo(0,0);
+    ctx.lineTo(200,100);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(100,50,30,0,2*Math.PI);
+    ctx.lineTo(200,0);
+    ctx.stroke();
+    
+    ctx.font = "30px Arial";
+    ctx.fillText("안녕하세요!", 20, 50);
+
+    var grd = ctx.createLinearGradient(0,0,0,100);
+
+    grd.addColorStop(0, "red");
+    grd.addColorStop(1, "white");
+
+    ctx.fillStyle = grd;
+    ctx.fillRect(10,10,150,100);
+
+    function myMap(){
+        var options = {
+            center: new google.maps.LatLng(51.5, -0.12),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        }
+    var map = new google.maps.Map(document.getElementById("map"), options);
+    }
+
+function allowDrop(ev){
+    ev.preventDefault();
+}
+
+function drag(ev){
+    ev.dataTransfer.setData("asdf", ev.target.id);
+}
+
+function drop(ev){
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("asdf");
+    ev.target.appendChild(document.getElementById(data));
+}
+
+//localStorage.setItem("name", "sangjin");
+//localStorage.lastname = "sangjin";
+sessionStorage.clickcount = 3;
+alert(sessionStorage.clickcount);
+document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
+
+<svg width="300" height="300">
+    <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow"/>
+</svg>
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY?playlist=tgbNymZ7vqY&loop=1"></iframe>
+
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event);"></div><br>
+<img id="drag1" src="owl.jpg" draggable="true" ondragstart="drag(event)" width="336" height="69"></div>
+<p id="otc">안녕하세요</p>
