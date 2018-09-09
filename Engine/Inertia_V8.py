@@ -195,6 +195,87 @@ def LineSearch(f, a, b, method="bisection"):
     
     else:
         return None
+  
+#########################################################
+
+# Rank
+def rank(x):
+    n = len(x)
+    y = sorted(x)
+    res = []
+    for i in range(n):
+        for j in range(n):
+            if x[j] == y[i]:
+                break
+        res.append(j)
+    return res
+
+rosen2 = lambda x: (1-x[0])**2+100*(x[1]-x[0]**2)**2
+#add = lambda x,y: [x[i]+y[i] for i in range(len(x))]
+#scalar = lambda c,x: [c*x[i] for i in range(len(x))]
+#subtract = lambda x,y: add(x, scalar(-1,y))
+
+# Nelder-Mead
+def nelder_mead(f, p):
+    
+    # setup
+    alpha = 1
+    gamma = 2
+    rho = 1/2
+    sigma = 1/2
+    n = 1000
+    eps = 1e-9
+    
+    # Loop
+    for _ in range(n):
+        
+        # Order
+        rk = rank(list(map(lambda x: f(x), p)))
+        p = [p[r] for r in rk]
+        x_0 = scalar(0.5, add(p[0], p[1]))
+        x_r = add(x_0, scalar(alpha, subtract(x_0, p[2])))
+
+        y_r = f(x_r)
+        y_1 = f(p[1])
+        y_0 = f(p[0])
+        
+        # Reflection
+        if y_0 <= y_r and y_r < y_1:
+            p[2] = x_r
+            #print("Reflection")
+            
+        # Expansion
+        elif y_r < y_0:
+            x_e = add(x_0, scalar(gamma, subtract(x_r, x_0)))
+            if f(x_e) < y_r:
+                p[2] = x_e
+                #print("Expansion 1")
+            else:
+                p[2] = x_r
+                #print("Expansion 2") 
+                
+        # Contraction
+        elif y_r >= y_1:  
+            x_c = add(x_0, scalar(rho, subtract(p[2], x_0)))
+            if f(x_c) < f(p[2]):
+                p[2] = x_c
+                #print("Contraction")
+            # Shrink
+            else:
+                p[1] = add(p[0], scalar(sigma, subtract(p[1], p[0])))
+                p[2] = add(p[0], scalar(sigma, subtract(p[2], p[0])))
+                #print("Shrink")
+                
+        # Exit
+        y = [f(p[i]) for i in range(3)]
+        mu = sum(y)/len(y)
+        std = sqrt(sum([(y[i] - mu)**2 for i in range(3)])/len(y))
+        if std < eps:
+            break
+ 
+    return scalar(1/3, add(add(p[0], p[1]), p[2]))    
+    
+#########################################################
       
 # Multivariate normal distribution
 # only valid when input is a 2-dim vector, v=(x,y)
@@ -556,4 +637,3 @@ def ReducedEntropy(data, col, par):
 # Information Gain
 def InfoGain(data, col, par):
     return Entropy(data, col) - ReducedEntropy(data, col, par)
-    
