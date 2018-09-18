@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>vue 시작하기!</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <h1>vue 시작하기입니다</h1>
+        <div id="ex1">
+            <p>{{message}}</p>
+            <a v-bind:href="link0">네이버로 가는 길</a>
+            <br>
+            <img v-bind:src="src0" height="100" alt='dog.jpg'>
+            <h2>{{dt.getFullYear()}}</h2>
+        </div>
+        
+        <div id="ex2">
+            <input type="text" name="" v-model:value="text0">
+            <h1>{{text0}}</h1>
+        </div>
+
+        <div id="ex3">
+            <select v-model="select0">
+                <option value="" disabled>옵션 하나 선택해라</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <p>{{select0*select0}}</p>
+        </div>
+
+        <script type="text/javascript">
+
+            var temp = 0;
+            for (var i=1; i<=10; ++i){
+                console.log(i, temp);
+                temp += i;
+            }
+
+            let ex1 = new Vue({
+                el: '#ex1',
+                data() {
+                    return {
+                        message: temp,
+                        link0: 'http://www.naver.com',
+                        src0: 'https://i.ytimg.com/vi/SfLV8hD7zX4/maxresdefault.jpg',
+                        dt: new Date()
+                    }
+                }
+            });
+
+            let ex2 = new Vue({
+                el: '#ex2',
+                data() {
+                    return {
+                        text0: 'hello world!'
+                    }
+                }
+            });
+
+            let ex3 = new Vue({
+                el: '#ex3',
+                data() {
+                    return {
+                        select0: ''
+                    }
+                }
+            });
+
+        </script>
+
+    </body>
+</html>
