@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>vue 시작하기!!</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <h1>vue 시작하기!!</h1>
+
+        <div id="start">
+            <a v-bind:href="link1">페이지 이동</a>
+            <img v-bind:src="src1" alt="fron.png">
+        </div>
+
+
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        link1: 'http://blog.naver.com/pjt3591oo',
+                        src1 : 'https://blogpfthumb-phinf.pstatic.net/20150108_189/pjt3591oo_1420674831487anbDY_PNG/frog.png?type=w161'
+                    }
+                }
+            })
+        </script>
+
+    </body>
+</html>

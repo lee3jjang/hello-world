@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>vue 시작하기!!</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <input type="text" name="" v-model:value="text">
+            <h1>{{text}}</h1>
+        </div>
+
+
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        text: 'hello world!'
+                    }
+                }
+            })
+        </script>
+
+    </body>
+</html>

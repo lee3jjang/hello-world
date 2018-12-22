@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>vue 시작하기!!</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <h1>{{calcDate()}}</h1>
+            <input type="text" name="" v-model:value="value">
+            <h1>{{sum}}</h1>
+        </div>
+
+
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        date: new Date(),
+                        value: 1,
+                        sum: 1,
+                    }
+                },
+                methods: {
+                    calcDate: function(){
+                        return this.date.getFullYear() + '-' + (parseInt(this.date.getMonth())+1) + '-' + this.date.getDate()
+                    }
+                },
+                watch: {
+                    value: function(d){
+                        this.sum += parseInt(d)
+                    }
+                }
+            })
+        </script>
+
+    </body>
+</html>
