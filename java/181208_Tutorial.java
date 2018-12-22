@@ -15,7 +15,7 @@ public class Tutorial {
 	public static void main(String[] args) {
 		
 		// Runnable AND .run()
-		// void ¡æ void
+		// void Â¡Ã¦ void
 		Runnable r = () -> System.out.println("Hello Functional!");
 		r.run();
 
