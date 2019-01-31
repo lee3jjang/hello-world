@@ -277,3 +277,4 @@ class DBHandler:
         db.commit()
         
         """
+        self.conn.commit()
