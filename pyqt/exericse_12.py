@@ -16,6 +16,7 @@ class App(QWidget):
 
         # 버튼
         self.btn = QPushButton('저장')
+        self.btn.clicked.connect(on_cl)
 
         # 테이블
         self.createTable()
@@ -42,6 +43,13 @@ class App(QWidget):
                 self.table.setItem(r, c,
                                    QTableWidgetItem(data[r][c]))
         fp.close()
+
+def on_cl():
+    fp = open('out.txt', 'wb')
+    for r in range(ex.size):
+        for c in range(ex.size):
+            pickle.dump(ex.table.item(r, c).text(), fp)
+    fp.close()
 
 
 app = QApplication(sys.argv)
