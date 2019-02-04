@@ -3,11 +3,32 @@ from urllib.parse import urlparse, urlencode
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+from datetime import datetime
 
 
-class PnoCrawler:
+class CetizenCrawler:
 
     def __init__(self):
+        self.lastModifiedBy = 'cetizen_crawler'
+        self.lastUpdateDate = datetime.now().strftime('%Y-%m-%d')
+
+    def _save(self, data):
+        writer = pd.ExcelWriter('{}.xlsx'.format(self.tableName), 'xlsxwriter')
+        data.to_excel(writer, index=False)
+        writer.save()
+        writer.close()
+
+    def _add_info(self, data):
+        data['lastModifiedBy'] = self.lastModifiedBy
+        data['lastUpdateDate'] = self.lastUpdateDate
+        return data
+
+class PnoCrawler(CetizenCrawler):
+
+    def __init__(self):
+        self.tableName = '상품정보'
+        super().__init__()
+
         url = 'https://price.cetizen.com/'
         res = req.Request(url)
         html = req.urlopen(res).read().decode('cp949')
@@ -40,28 +61,25 @@ class PnoCrawler:
         df = df[['wireless', 'pno', 'name', 'model']].drop_duplicates().reset_index(drop=True)
         return df
 
-    def crawling(self):
+    def crawling(self, save=True):
         rst_list = []
         for wl in self.wireless.items():
             rst_list.append(self._get_info_wireless(wl))
         df = pd.concat(rst_list)
-        df = self._data_processing(df)
-        self.data = df
+        df = self._add_info(self._data_processing(df))
+        if save:
+            self._save(df)
         return df
 
-    def save(self):
-        writer = pd.ExcelWriter('상품정보.xlsx', 'xlsxwriter')
-        self.data.to_excel(writer, index=False)
-        writer.save()
-        writer.close()
 
-
-class ReleasePriceCrawler:
+class ReleasePriceCrawler(CetizenCrawler):
 
     def __init__(self, pno):
+        self.tableName = '출고가정보'
+        super().__init__()
         self.pno = pno
 
-    def crawling(self):
+    def crawling(self, save=True):
         rst_list = []
         for pl in self.pno:
             params = {'act': 'factory_price', 'q': 'info', 'pno': pl}
@@ -77,23 +95,20 @@ class ReleasePriceCrawler:
             data = eval(txt)
             for dt in data:
                 rst_list.append((pl, dt['date'], dt['value']))
-        df = pd.DataFrame(rst_list, columns=['pno', 'date', 'value'])
-        self.data = df
+        df = self._add_info(pd.DataFrame(rst_list, columns=['pno', 'date', 'value']))
+        if save:
+            self._save(df)
         return df
 
-    def save(self):
-        writer = pd.ExcelWriter('출고가정보.xlsx', 'xlsxwriter')
-        self.data.to_excel(writer, index=False)
-        writer.save()
-        writer.close()
 
-
-class UsedPriceCrawler:
+class UsedPriceCrawler(CetizenCrawler):
 
     def __init__(self, pno):
+        self.tableName = '중고가정보'
+        super().__init__()
         self.pno = pno
 
-    def crawling(self):
+    def crawling(self, save=True):
         rst_list = []
         for pl in self.pno:
             params = {'q': 'info', 'pno': pl}
@@ -109,14 +124,10 @@ class UsedPriceCrawler:
             data = eval(txt)
             for dt in data:
                 rst_list.append((pl, dt['date'], dt['low'], dt['mid'], dt['high']))
-        df = pd.DataFrame(rst_list, columns=['pno', 'date', 'low', 'mid', 'high'])
-        self.data = df
+        df = self._add_info(pd.DataFrame(rst_list, columns=['pno', 'date', 'low', 'mid', 'high']))
+        if save:
+            self._save(df)
         return df
 
-    def save(self):
-        writer = pd.ExcelWriter('중고가정보.xlsx', 'xlsxwriter')
-        self.data.to_excel(writer, index=False)
-        writer.save()
-        writer.close()
 
 
