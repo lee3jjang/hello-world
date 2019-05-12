@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <h1 v-if="condition1">1</h1>
+            <h1 v-if="condition2">2</h1>
+        </div>
+
+        <div id="end">
+            <h1 v-if="condition1">1</h1>
+            <h1 v-else-if="condition2">2</h1>
+            <h1 v-else>3</h1>
+        </div>
+
+        <div id="mid">
+            <div class="tab_select">
+                <input type="radio" value="1" v-model="tabPick">
+                <label>1</label>
+                <input type="radio" value="2" v-model="tabPick">
+                <label>2</label>
+            </div>
+
+            <div class="condition">
+                <div v-if="tabPick == '1'">
+                    <h1>1 탭을 클릭했습니다.</h1>
+                </div>
+                <div v-else-if="tabPick == '2'">
+                    <h1>2 탭을 클릭했습니다.</h1>
+                </div>
+                <div v-else>
+                    <h1>알 수 없는 탭을 클릭했습니다.</h1>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        condition1: true,
+                        condition2: false
+                    }
+                }
+            });
+
+            let app2 = new Vue({
+                el: '#end',
+                data() {
+                    return {
+                        condition1: false,
+                        condition2: false
+                    }
+                }
+            });
+
+            let app3 = new Vue({
+                el: '#mid',
+                data() {
+                    return {
+                        tabPick: '3'
+                    }
+                }
+            });
+
+        </script>
+    </body>
+</html>

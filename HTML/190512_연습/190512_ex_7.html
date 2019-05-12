@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <input type="text" name="" v-bind:value="text">
+            <h1>{{text}}</h1>
+
+            <input type="text" v-model:value="text">
+            <h1>{{text}}</h1>
+        </div>
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        text: 'hello world!'
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

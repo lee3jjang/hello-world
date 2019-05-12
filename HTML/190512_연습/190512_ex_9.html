@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <h1>{{calcDate}}</h1>
+            <h2>{{calcDate}}</h2>
+            <h3>{{calcDate}}</h3>
+        </div>
+
+        <div id="end">
+            <h1>{{calcDate()}}</h1>
+            <h2>{{calcDate()}}</h2>
+            <h3>{{calcDate()}}</h3>
+        </div>
+
+        <div id="mid">
+            <input type="text" v-model:value="x">
+            <h1>{{sum}}</h1>
+        </div>
+
+        <script type="text/javascript">
+            // computed: caching됨
+            // methods: 호출할 때 마다 계산함
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        date: new Date()
+                    }
+                },
+                computed: {
+                    calcDate: function(){
+                        //return this.date.getFullYear() + '-' + (parseInt(this.date.getMonth()) + 1) + '-' + this.date.getDate();
+                        return `${this.date.getFullYear()}-${parseInt(this.date.getMonth())+1}-${this.date.getDate()} 입니까?`
+                    }
+                }
+            });
+
+            let app2 = new Vue({
+                el: '#end',
+                data() {
+                    return {
+                        date: new Date()
+                    }
+                },
+                methods: {
+                    calcDate: function(){
+                        return `${this.date.getFullYear()}-${parseInt(this.date.getMonth())+1}-${this.date.getDate()} 입니다`
+                    }
+                }
+            });
+
+            let app3 = new Vue({
+                el: '#mid',
+                data() {
+                    return {
+                        x: 1,
+                        sum: 1
+                    }
+                },
+                watch: {
+                    x: function(d) {
+                        if(!isNaN(d)){
+                            this.sum += parseInt(d);
+                        }
+                        this.x = 0;   
+                    }
+                }
+            })
+
+        </script>
+    </body>
+</html>

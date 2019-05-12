@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+
+    <body>
+        <div id="start">
+
+        </div>
+    </body>
+
+    <script>
+        let app = new Vue({
+            el: '#start',
+            created() {
+                alert('created');
+            },
+            beforeCreate() {
+                alert('beforeCreated');
+            },
+            mounted(){
+                alert('mounted');
+            },
+            beforeMount(){
+                alert('beforeMounted');
+            }
+        })
+    </script>
+</html>

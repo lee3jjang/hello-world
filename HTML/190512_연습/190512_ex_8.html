@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+    <body>
+        <div id="start">
+            <select v-model="select">
+                <option value="" disabled>옵션 중 하나를 선택해주세요</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <h1>선택함 : {{select}}</h1>
+        </div>
+
+        <div id="end">
+            <input type="checkbox" value="1" v-model="checks">
+            <label>1</label>
+            <input type="checkbox" value="2" v-model="checks">
+            <label>2</label>
+            <input type="checkbox" value="3" v-model="checks">
+            <label>3</label>
+            <br>
+            <h1>체크리스트 : {{checks}}</h1>
+        </div>
+
+        <div id="mid">
+                <input type="radio" value="1" v-model="pick">
+                <label>1</label>
+                <input type="radio" value="2" v-model="pick">
+                <label>2</label>
+                <input type="radio" value="3" v-model="pick">
+                <label>3</label>
+                <br>
+                <h1>선택 : {{pick}}</h1>
+        </div>
+
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#start',
+                data() {
+                    return {
+                        select: ''
+                    }
+                }
+            });
+
+            let app2 = new Vue({
+                el: '#end',
+                data() {
+                    return {
+                        checks: ['1', '3']
+                    }
+                }
+            });
+
+            let app3 = new Vue({
+                el: '#mid',
+                data() {
+                    return {
+                        pick: '2'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
