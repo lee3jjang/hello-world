@@ -3,9 +3,9 @@
 
 # In[1]:
 
+
 import torch
 from itertools import product
-
 
 class Ising:
     
