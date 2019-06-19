@@ -165,7 +165,11 @@ public class Main {
 		StringVector w = new StringVector(t);
 		//StringMatrix.concatenateRowVector(new StringVector[] {v, w}).print();
 		v.concatenate(w).print();
+		System.out.println(Math.random());
 		
+		NormalDistribution norm = new NormalDistribution();
+		new Vector(norm.sample(100)).print();
 		
 	}
 }
+

@@ -74,6 +74,24 @@ public class StringVector {
 		return new StringVector(v);
 	}
 	
+	// Substring
+	public StringVector substring(int i, int j) {
+		return this.map(s -> s.substring(i, j));
+	}
+	
+	public StringVector substring(int i) {
+		return this.map(s -> s.substring(i));
+	}
+	
+	// Replace
+	public StringVector replace(String s1, String s2) {
+		return this.map(s -> s.replace(s1, s2));
+	}
+	
+	public StringVector replaceFirst(String s1, String s2) {
+		return this.map(s -> s.replaceFirst(s1, s2));
+	}
+	
 	// Transpose
 	public StringMatrix transpose() {
 		int n = this.data.length;
