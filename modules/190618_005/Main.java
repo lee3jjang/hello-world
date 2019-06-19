@@ -153,7 +153,7 @@ public class Main {
 		CsvReader csv = new CsvReader();
 		csv.readCsv("C:/Users/11700205/dev/Python/2. ESG/data/test/KIS_spot_continuous_montly_201612.csv");
 		System.out.println(csv.getData()[0][0]);
-		String[] s = new String[] {"operation cwal", "show me the money"};
+		String[] s = new String[] {"show me the money", "operation cwal"};
 		String[] t = new String[] {"black sheep wall", "power overwhelming"};
 		StringVector v = new StringVector(s);
 		StringVector w = new StringVector(t);
@@ -175,8 +175,10 @@ public class Main {
 		double alpha = 0.01;
 		double sigma = 0.005;
 		HullWhite hw = new HullWhite(alpha, sigma, sw);
-		double[] param = hw.calibration(alpha, sigma);
-		(new Vector(param)).print();
+	
+		(new Matrix(hw.simulation(10, 2))).print();
+		System.out.println(sw.forwardBtw(0, 1/12.));
+	
 	}
 }
 

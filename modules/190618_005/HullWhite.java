@@ -11,11 +11,11 @@ public class HullWhite {
 	}
 
 	public HullWhite(double alpha, double sigma, SmithWilson curve) {
-		this.setParam(alpha, sigma);
+		this.setParams(alpha, sigma);
 		this.curve = curve;
 	}
 	
-	public void setParam(double alpha, double sigma) {
+	public void setParams(double alpha, double sigma) {
 		this.alpha = alpha;
 		this.sigma = sigma;
 	}
@@ -85,6 +85,34 @@ public class HullWhite {
 		};
 		NelderMead nm = new NelderMead();
 		return nm.optimize(fn, x0).getData();
+	}
+	
+	private double theta(double t) {
+		return this.curve.forward(t, 1)+this.alpha*this.curve.forward(t, 0)+Math.pow(this.sigma, 2)/(2*this.alpha)*(1-Math.exp(-2*this.alpha*t));
+	}
+	
+	public double[] simulation(int max) {
+		double dt = 1./12.;
+		int n = (int)(max/dt);
+		double t = 0.;
+		NormalDistribution norm = new NormalDistribution();
+		double[] N = norm.sample(n);
+		double dW;
+		Vector r = new Vector(new double[n+1]);
+		r.setEntry(0, Math.log(1+this.curve.forwardBtw(0, dt)));
+		for(int i=0; i<n; i++) {
+			dW = Math.sqrt(dt)*N[i];
+			r.setEntry(i+1, r.getEntry(i)+(this.theta(t)-this.alpha*r.getEntry(i))*dt+this.sigma*dW);
+			t += dt;
+		}
+		return r.map(x -> Math.exp(x)-1).getData();
+	}
+	
+	public double[][] simulation(int max, int n) {
+		Vector[] v = new Vector[n];
+		for(int i=0; i<n; i++)
+			v[i] = new Vector(this.simulation(max));
+		return Matrix.concatenateRowVector(v).getData();
 	}
 
 }

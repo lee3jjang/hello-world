@@ -150,7 +150,7 @@ public class SmithWilson {
 	}
 	
 	// Forward Rate between t1 and t2 (Annually Compounded)
-	public double forward(double t1, double t2) {
+	public double forwardBtw(double t1, double t2) {
 		if(t1 > t2) {
 			throw new RuntimeException("조건 t1 <= t2 위반입니다.");
 		} else if (t1 == t2) {
