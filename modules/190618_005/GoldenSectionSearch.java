@@ -1,7 +1,7 @@
 package esg;
 
 public class GoldenSectionSearch {
-	private double eps = 1e-5;
+	private double eps = 1e-10;
 	
 	public double optimize(UnivariateFunction<Double> fn, double x1, double x2) {
 		double phi = (1+Math.sqrt(5))/2;

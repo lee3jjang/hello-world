@@ -210,6 +210,17 @@ public class StringMatrix {
 		return new StringVector(w);
 	}
 	
+	// String to double
+	public Matrix toMatrix() {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		double[][] A = new double[m][n];
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				A[i][j] = Double.parseDouble(this.data[i][j]);
+		return new Matrix(A);
+	}
+	
 	
 	/* Matrix Utilities */
 	

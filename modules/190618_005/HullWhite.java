@@ -4,16 +4,20 @@ public class HullWhite {
 	public double alpha;
 	public double sigma;
 	public SmithWilson curve;
-	public Map<Double, Map<Double, Double>> HullWhiteRS;
+	public Matrix HullWhiteRS;
 	
 	public HullWhite(SmithWilson curve) {
 		this.curve = curve;
 	}
 
 	public HullWhite(double alpha, double sigma, SmithWilson curve) {
+		this.setParam(alpha, sigma);
+		this.curve = curve;
+	}
+	
+	public void setParam(double alpha, double sigma) {
 		this.alpha = alpha;
 		this.sigma = sigma;
-		this.curve = curve;
 	}
 	
 	public double B(double t, double T) {
@@ -36,104 +40,51 @@ public class HullWhite {
 	}
 	
 	public double Jamshidian(double start, double tenor) {
-		double[] c = curve.fswapCashFlows.get(start).get(tenor).toArray();
-		double[] T = curve.fswapTerms.get(start).get(tenor).toArray();
-		int n = T.length;
-		
-		UnivariateFunction fn = r ->  {
-			return Math.abs(IntStream.iterate(0, i->i+1)
-					.limit(n)
-					.mapToDouble(i -> c[i]*bond(start, T[i], r))
-					.sum()-1);
-		};
+		Vector c = curve.fswapCashFlows.get(start).get(tenor);
+		Vector T = curve.fswapTerms.get(start).get(tenor);
+		UnivariateFunction<Double> fn = r ->  Math.abs(c.eleMultiply(T.map(t -> this.bond(start, t, r))).sum()-1);
 		GoldenSectionSearch optimizer = new GoldenSectionSearch();
-		double result = optimizer.optimize(fn, 0, 1);
-		
+		double result = optimizer.optimize(fn, 0, 0.1);
 		return result;
 	}
 	
 	public double rsHullWhite(double maturity, double tenor) {
-		double[] c = curve.fswapCashFlows.get(maturity).get(tenor).toArray();
-		double[] T = curve.fswapTerms.get(maturity).get(tenor).toArray();
+		Vector c = this.curve.fswapCashFlows.get(maturity).get(tenor);
+		Vector T = this.curve.fswapTerms.get(maturity).get(tenor);
 		double r = Jamshidian(maturity, tenor);
-		int n = T.length;
-		
 		NormalDistribution norm = new NormalDistribution();
-		
-		return IntStream.iterate(0, i->i+1)
-				.limit(n)
-				.mapToDouble(i -> {
-					double X = bond(maturity, T[i], r);
-					double dPos = 1/sigma_p(maturity, T[i])*Math.log(curve.bondPrices.get(T[i])/curve.bondPrices.get(maturity)/X) + sigma_p(maturity, T[i])/2;
-					double dNeg = dPos - sigma_p(maturity, T[i]);
-					double terms = c[i]*(curve.bondPrices.get(T[i])*norm.cumulativeProbability(dPos) - X*curve.bondPrices.get(maturity)*norm.cumulativeProbability(dNeg));
-					return terms;
-				}).sum();
+		Vector bondPrices = T.map(t -> this.curve.bond(t, 0));
+		Vector X = T.map(t -> this.bond(maturity,  t, r));
+		Vector sigmaP = T.map(t -> sigma_p(maturity, t));
+		Vector dPos = bondPrices.scalarMultiply(1/this.curve.bond(maturity, 0)).eleDivide(X).map(x -> Math.log(x)).eleDivide(sigmaP).add(sigmaP.scalarMultiply(0.5));
+		Vector dNeg = dPos.subtract(sigmaP);
+		Vector term1 = bondPrices.eleMultiply(dPos.map(x -> norm.cumulativeProbability(x)));
+		Vector term2 = X.eleMultiply(dNeg.map(x -> norm.cumulativeProbability(x))).scalarMultiply(this.curve.bond(maturity,  0));
+		return term1.subtract(term2).eleMultiply(c).sum();
 	}
 	
-	public void calcHullWhiteRS() {
-		HullWhiteRS = new HashMap<>();
-		Map<Double, Double> HullWhiteRS2;
-		double T, S;
-		
-		for(int i=0; i<curve.m1; i++) {
-			T = curve.swaptionMaturity.getEntry(i);
-			HullWhiteRS2 = new HashMap<>();
-			for(int j=0; j<curve.m2; j++) {
-				S = curve.swapTenor.getEntry(j);
-				HullWhiteRS2.put(S, rsHullWhite(T, S));
+	public void calculateHullWhiteRS() {
+		int m = this.curve.swaptionMaturity.getDimension();
+		int n = this.curve.swapTenor.getDimension();
+		double maturity, tenor;
+		HullWhiteRS = Matrix.createZeroMatrix(m, n);
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++) {
+				maturity = this.curve.swaptionMaturity.getEntry(i);
+				tenor = this.curve.swapTenor.getEntry(j);
+				HullWhiteRS.setEntry(i, j, rsHullWhite(maturity, tenor));
 			}
-			HullWhiteRS.put(T, HullWhiteRS2);
-		}
 	}
 	
-	private static class HullWhiteError implements MultivariateFunction {
-		SmithWilson curve;
-		
-		public HullWhiteError(SmithWilson curve) {
-			this.curve = curve;
-		}
-		
-		@Override
-		public double value(double[] point) {
-			if(point[0] <= 0 || point[1] <=0 || point[0] > 1 || point[1] > 1)
-				return 1e10;
-			HullWhite hw = new HullWhite(point[0], point[1], curve);
-			double err = 0;
-			double T, S;
-			hw.calcHullWhiteRS();
-			
-			for(int i=0; i<hw.curve.m1; i++) {
-				T = hw.curve.swaptionMaturity.getEntry(i);
-				for(int j=0; j<hw.curve.m2; j++) {
-					S = hw.curve.swapTenor.getEntry(j);
-					err += Math.pow(hw.HullWhiteRS.get(T).get(S) - hw.curve.blackRS.get(T).get(S), 2);
-				}
-			}
-			System.out.println(Math.sqrt(err));
-			return  Math.sqrt(err);
-			
-		}
+	public double[] calibration(double alpha, double sigma) {
+		Vector x0 = new Vector(new double[] {alpha, sigma});
+		MultivariateFunction fn = x -> {
+			HullWhite hw = new HullWhite(x.getEntry(0), x.getEntry(1), this.curve);
+			hw.calculateHullWhiteRS();
+			return Math.sqrt(hw.curve.blackRS.subtract(hw.HullWhiteRS).power(2).sum());
+		};
+		NelderMead nm = new NelderMead();
+		return nm.optimize(fn, x0).getData();
 	}
-	
-	public double[] calibration() {
 
-		SimplexOptimizer optimizer = new SimplexOptimizer(1e-30, 1e-30);
-		PointValuePair result = null;
-		try {
-			result = optimizer.optimize(
-					new MaxEval(100),
-					new ObjectiveFunction(new HullWhiteError(curve)),
-					new NelderMeadSimplex(2),
-					GoalType.MINIMIZE,
-					new InitialGuess(new double[] {0.01, 0.006})
-				);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result.getPoint();
-		
-		
-	}
 }

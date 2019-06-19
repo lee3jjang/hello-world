@@ -1,5 +1,8 @@
 package esg;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SmithWilson {
 	public final double tau = 0.25;
 	
@@ -21,16 +24,20 @@ public class SmithWilson {
 	public Vector swapTenor;
 	public Matrix blackVol;
 	public Matrix blackRS;
+	public Map<Double, Map<Double, Vector>> fswapTerms;
+	public Map<Double, Map<Double, Vector>> fswapCashFlows;
+	
 	public int m1, m2;
 	
-	public SmithWilson(double[] term, double[] rate, double alpha, double ufr, double llp) {
+	private SmithWilson(double[] term, double[] rate, double alpha, double ufr, double llp) {
 		this.ufr = Math.log(1+ufr);
 		this.llp = llp;
 		this.term = new Vector(term);
 		this.rate = new Vector(rate);
 		this.n = rate.length;
 		this.setAlpha(alpha);
-		this.generateRates(100);
+		//this.generateRates(100);
+		//this.generateFswapCashFlow(20);
 	}
 	
 	public SmithWilson(double[] term, double[] rate, double ufr, double llp) {
@@ -158,7 +165,7 @@ public class SmithWilson {
 		this.alpha = alpha;
 		calculateZeta();
 	}
-
+	
 	// Calculate Alpha
 	public double calculateAlpha() {
 		GoldenSectionSearch optimizer = new GoldenSectionSearch();
@@ -177,6 +184,15 @@ public class SmithWilson {
 		for(int i=1; i<=l; i++)
 			term2 += bond(start+tau*i, 0);
 		return term1/term2;
+	}
+	
+	// Forward Swap Terms
+	public Vector fswapTerms(double start, double tenor) {
+		int l = (int)(tenor/tau);
+		Vector t = Vector.createZeroVector(l);
+		for(int i=0; i<l; i++) 
+			t.setEntry(i, tau*(i+1)+start);
+		return t;
 	}
 	
 	// Forward Swap Cash Flow
@@ -198,7 +214,7 @@ public class SmithWilson {
 	}
 	
 	// Generate Rates
-	private void generateRates(double max) {
+	private void generateRates(int max) {
 		int l = (int)(max/tau)+1;
 		double[] mat = new double[l];
 		for(int i=0; i<l; i++)
@@ -209,14 +225,35 @@ public class SmithWilson {
 		forwardRates = forward(maturities, 0).map(s -> Math.exp(s)-1);
 	}
 	
+	// Generate Forward Swap Cash Flow
+	private void generateFswapCashFlow() {
+		Map<Double, Vector> temp, temp2;
+		this.fswapTerms = new HashMap<>();
+		this.fswapCashFlows = new HashMap<>();
+		int m = this.swaptionMaturity.getDimension();
+		int n = this.swapTenor.getDimension();
+		for(int i=0; i<m; i++) {
+			temp = new HashMap<>();
+			for(int j=0; j<n; j++)
+				temp.put(this.swapTenor.getEntry(j), fswapCashFlow(this.swaptionMaturity.getEntry(i), this.swapTenor.getEntry(j)));
+			this.fswapCashFlows.put(this.swaptionMaturity.getEntry(i), temp);
+			
+			temp2 = new HashMap<>();
+			for(int j=0; j<n; j++)
+				temp2.put(this.swapTenor.getEntry(j), fswapTerms(this.swaptionMaturity.getEntry(i), this.swaptionMaturity.getEntry(j)));
+			this.fswapTerms.put(this.swaptionMaturity.getEntry(i), temp2);
+		}
+	}
+	
 	// Set Swaption Volatility
-	public void setBlackVol(double[] swapTenor, double[] swaptionMaturity, double[][] blackVol) {
+	public void setBlackVol(double[] swaptionMaturity, double[] swapTenor, double[][] blackVol) {
 		this.swaptionMaturity = new Vector(swaptionMaturity);
 		this.m1 = swaptionMaturity.length;
 		this.swapTenor = new Vector(swapTenor);
 		this.m2 = swapTenor.length;
 		this.blackVol = new Matrix(blackVol);
 		this.calculateBlackRS();
+		this.generateFswapCashFlow();
 	}
 	
 	public void setBlackVol(double[] tenor, double[][] blackVol) {

@@ -1,6 +1,5 @@
 package esg;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -145,31 +144,39 @@ public class Main {
 		double[] initialState = new double[] {0.0258,  -0.0104, 0.0032};
 		double[][] initialError = new double[][] {{1., 0., 0.}, {0., 1., 0.}, {0., 0., 1.}};
 		double[] initialParam = new double[] {0.60731, 0.001, 0.12844, 0.34156, 0.70498, 0.04029, -0.02018, -0.00900, 0.00653, -0.00610, 0.00420, 0.00009, -0.00468, 0.01036};
-				
 		MultivariateFunction fn = x -> {
 			DynamicNelsonSiegel dns = new DynamicNelsonSiegel(x.getData());
 			dns.setState(initialState, initialError);
 			double logL = dns.estimate(measurements);
 			return logL;
 		};
-		
 		CsvReader csv = new CsvReader();
-		
 		csv.readCsv("C:/Users/11700205/dev/Python/2. ESG/data/test/KIS_spot_continuous_montly_201612.csv");
-		
 		System.out.println(csv.getData()[0][0]);
-		
 		String[] s = new String[] {"operation cwal", "show me the money"};
 		String[] t = new String[] {"black sheep wall", "power overwhelming"};
 		StringVector v = new StringVector(s);
 		StringVector w = new StringVector(t);
-		//StringMatrix.concatenateRowVector(new StringVector[] {v, w}).print();
 		v.concatenate(w).print();
-		System.out.println(Math.random());
 		
-		NormalDistribution norm = new NormalDistribution();
-		new Vector(norm.sample(100)).print();
-		
+		double[] term = new double[] {1,2,3,4,5,7,10,12,15,20};
+		double[] rate = new double[] {0.0334,0.0326,0.0327,0.0328,0.033,0.0335,0.0342,0.0345,0.0347,0.0352};
+		double[] tenor = new double[] {1,2,3,5,7,10};
+		double[][] blackVol = new double[][] {{0.1815,0.172,0.17,0.1605,0.158,0.155},
+				        								      {0.177,0.1715,0.17,0.158,0.1545,0.15},
+				        								      {0.174,0.168,0.1655,0.1555,0.1495,0.1475},
+				        								      {0.165,0.1575,0.157,0.1495,0.1455,0.144},
+				        								      {0.165,0.1575,0.157,0.1535,0.1455,0.144},
+				        								      {0.1665,0.159,0.1575,0.15,0.1455,0.14}};
+		double ufr = 0.045;
+		double llp = 20;
+		SmithWilson sw = new SmithWilson(term, rate, ufr, llp);
+		sw.setBlackVol(tenor, blackVol);
+		double alpha = 0.01;
+		double sigma = 0.005;
+		HullWhite hw = new HullWhite(alpha, sigma, sw);
+		double[] param = hw.calibration(alpha, sigma);
+		(new Vector(param)).print();
 	}
 }
 

@@ -122,6 +122,15 @@ public class StringVector {
 		return new StringVector(w);
 	}
 	
+	// String to double
+	public Vector toVector() {
+		int n = this.data.length;
+		double[] v = new double[n];
+		for(int i=0; i<n; i++)
+			v[i] = Double.parseDouble(this.data[i]);
+		return new Vector(v);
+	}
+	
 	
 	/* Vector Utilities */
 	

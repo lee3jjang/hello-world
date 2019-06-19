@@ -198,6 +198,15 @@ public class Vector {
 		return new Vector(w);
 	}
 	
+	// double to String
+	public StringVector toStringVector() {
+		int n = this.data.length;
+		String[] v = new String[n];
+		for(int i=0; i<n; i++)
+			v[i] = String.valueOf(this.data[i]);
+		return new StringVector(v);
+	}
+	
 	
 	/* Vector Utilities */
 	

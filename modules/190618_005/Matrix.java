@@ -84,6 +84,17 @@ public class Matrix {
 		return new Matrix(B);
 	}
 	
+	// Sum
+	public double sum() {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		double value = 0.;
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				value += this.data[i][j];
+		return value;
+	}
+	
 	// Element-Wise Matrix Multiplication
 	public Matrix eleMultiply(Matrix A) {
 		int m = A.getData().length;
@@ -448,6 +459,17 @@ public class Matrix {
 	// Row Standard Deviation of Matrix
 	public Vector stdRowVector() {
 		return this.applyRowVector(x -> x.std());
+	}
+	
+	// double to String
+	public StringMatrix toStringMatrix() {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		String[][] A = new String[m][n];
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				A[i][j] = String.valueOf(this.data[i][j]);
+		return new StringMatrix(A);
 	}
 	
 	

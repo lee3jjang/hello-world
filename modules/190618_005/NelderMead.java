@@ -24,7 +24,7 @@ public class NelderMead {
 			x[i] = temp;
 		}
 		while(Matrix.concatenateColumnVector(x).applyColumnVector(fn).std() > this.eps) {
-			x[0].print();
+			x[0].print();    // Temp
 			//1. Order
 			Arrays.sort(x, new CompareVectorByFunction(fn));
 			//2. Centroid

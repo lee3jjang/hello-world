@@ -36,6 +36,6 @@ public class MultilinearRegression {
 			for(int j=0; j<n-1; j++)
 				A[i][j+1] = regressors[i][j];
 		}
-		return (new Matrix(A)).operate(this.beta).getData();		
+		return (new Matrix(A)).operate(this.beta).getData();
 	}
 }
