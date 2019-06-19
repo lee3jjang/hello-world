@@ -186,6 +186,18 @@ public class Vector {
 		return Math.sqrt(value);
 	}
 	
+	// Concatenate
+	public Vector concatenate(Vector v) {
+		int n = this.data.length;
+		int m = v.getDimension();
+		double[] w = new double[n+m];
+		for(int i=0; i<n; i++)
+			w[i] = this.data[i];
+		for(int i=0; i<m; i++)
+			w[m+i] = v.getEntry(i);
+		return new Vector(w);
+	}
+	
 	
 	/* Vector Utilities */
 	

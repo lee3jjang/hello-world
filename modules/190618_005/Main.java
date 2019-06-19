@@ -163,10 +163,8 @@ public class Main {
 		String[] t = new String[] {"black sheep wall", "power overwhelming"};
 		StringVector v = new StringVector(s);
 		StringVector w = new StringVector(t);
-		StringMatrix.concatenateRowVector(new StringVector[] {v, w}).print();
-		
-		
-		
+		//StringMatrix.concatenateRowVector(new StringVector[] {v, w}).print();
+		v.concatenate(w).print();
 		
 		
 	}

@@ -92,6 +92,18 @@ public class StringVector {
 		return value;
 	}
 	
+	// Concatenate
+	public StringVector concatenate(StringVector v) {
+		int n = this.data.length;
+		int m = v.getDimension();
+		String[] w = new String[n+m];
+		for(int i=0; i<n; i++)
+			w[i] = this.data[i];
+		for(int i=0; i<m; i++)
+			w[m+i] = v.getEntry(i);
+		return new StringVector(w);
+	}
+	
 	
 	/* Vector Utilities */
 	
