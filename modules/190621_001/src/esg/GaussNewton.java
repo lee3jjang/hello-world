@@ -1,15 +1,16 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class GaussNewton {
 	private double eps = 1e-15;
 	
-	public Vector optimize(Function<Vector, Vector> fn, Vector p0, Vector y) {
+	public Vector optimize(UnaryOperator<Vector> fn, Vector p0, Vector y) {
 		Matrix J;
 		Vector delta, r;
 		Function<Vector, Matrix> jacobian = new JacobianFunction(x -> fn.apply(x).scalarMultiply(-1.));
-		Function<Vector, Vector> residual = p -> y.subtract(fn.apply(p));
+		UnaryOperator<Vector> residual = p -> y.subtract(fn.apply(p));
 		Vector p = p0.copy();
 		while(true) {
 			J = jacobian.apply(p);

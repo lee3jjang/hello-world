@@ -1,12 +1,12 @@
 package esg;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class GradientDescent {
 	private double eps = 1e-5;
 	private double learningRate = 1e-2;
 	private double gamma = 0.;
-	public Vector optimize(Function<Vector, Vector> gradFn, Vector x0) {
+	public Vector optimize(UnaryOperator<Vector> gradFn, Vector x0) {
 		int n = x0.getDimension();
 		Vector v = Vector.createZeroVector(n);
 		Vector xCurrent = x0.copy();

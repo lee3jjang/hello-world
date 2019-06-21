@@ -1,6 +1,6 @@
 package esg;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class StringMatrix {
 	private String[][] data;
@@ -61,7 +61,7 @@ public class StringMatrix {
 	}
 	
 	// Map
-	public StringMatrix map(Function<String, String> fn) {
+	public StringMatrix map(UnaryOperator<String> fn) {
 		int m = this.data.length;
 		int n = this.data[0].length;
 		String[][] B = new String[m][n];

@@ -1,6 +1,7 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class HullWhite {
 	public double alpha;
@@ -44,7 +45,7 @@ public class HullWhite {
 	public double Jamshidian(double start, double tenor) {
 		Vector c = curve.fswapCashFlows.get(start).get(tenor);
 		Vector T = curve.fswapTerms.get(start).get(tenor);
-		Function<Double, Double> fn = r ->  Math.abs(c.eleMultiply(T.map(t -> this.bond(start, t, r))).sum()-1);
+		UnaryOperator<Double> fn = r ->  Math.abs(c.eleMultiply(T.map(t -> this.bond(start, t, r))).sum()-1);
 		GoldenSectionSearch optimizer = new GoldenSectionSearch();
 		double result = optimizer.optimize(fn, 0, 0.1);
 		return result;

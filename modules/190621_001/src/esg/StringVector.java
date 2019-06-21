@@ -1,6 +1,6 @@
 package esg;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class StringVector {
 	private String[] data;
@@ -68,7 +68,7 @@ public class StringVector {
 	}
 	
 	// Map
-	public StringVector map(Function<String, String> fn) {
+	public StringVector map(UnaryOperator<String> fn) {
 		int n = this.data.length;
 		String[] v = new String[n];
 		for(int i=0; i<n; i++)

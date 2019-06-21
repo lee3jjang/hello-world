@@ -26,5 +26,4 @@ public class Main {
 		Function<String, Integer> f = str -> Integer.parseInt(str);
 		System.out.println(f.apply("42"));
 	}
-
 }

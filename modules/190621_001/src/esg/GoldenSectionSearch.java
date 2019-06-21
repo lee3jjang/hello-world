@@ -1,11 +1,11 @@
 package esg;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class GoldenSectionSearch {
 	private double eps = 1e-10;
 	
-	public double optimize(Function<Double, Double> fn, double x1, double x2) {
+	public double optimize(UnaryOperator<Double> fn, double x1, double x2) {
 		double phi = (1+Math.sqrt(5))/2;
 		double x3, x4;
 		x3 = x2 - (x2-x1)/phi;

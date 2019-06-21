@@ -1,6 +1,7 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class Matrix {
 	private double[][] data;
@@ -76,7 +77,7 @@ public class Matrix {
 	}
 	
 	// Map
-	public Matrix map(Function<Double, Double> fn) {
+	public Matrix map(UnaryOperator<Double> fn) {
 		int m = this.data.length;
 		int n = this.data[0].length;
 		double[][] B = new double[m][n];

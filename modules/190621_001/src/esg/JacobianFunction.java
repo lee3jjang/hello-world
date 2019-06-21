@@ -1,12 +1,13 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class JacobianFunction implements Function<Vector, Matrix> {
 	private Function<Vector, Vector> fn;
 	private double eps = 1e-5;
 
-	public JacobianFunction(Function<Vector, Vector> fn) {
+	public JacobianFunction(UnaryOperator<Vector> fn) {
 		this.fn = fn;
 	}
 	

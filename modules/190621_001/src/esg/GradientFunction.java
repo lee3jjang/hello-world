@@ -1,8 +1,9 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-public class GradientFunction implements Function<Vector, Vector> {
+public class GradientFunction implements UnaryOperator<Vector> {
 	private Function<Vector, Double> fn;
 	private double eps = 1e-5;
 	

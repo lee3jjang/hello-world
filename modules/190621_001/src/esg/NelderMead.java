@@ -1,7 +1,6 @@
 package esg;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.function.Function;
 
 public class NelderMead {
@@ -27,7 +26,13 @@ public class NelderMead {
 		while(Matrix.concatenateColumnVector(x).applyColumnVector(fn).std() > this.eps) {
 			x[0].print();    // Temp
 			//1. Order
-			Arrays.sort(x, new CompareVectorByFunction(fn));
+			//Arrays.sort(x, new CompareVectorByFunction(fn));
+			Arrays.sort(x, (v, w) -> {
+				double sign = fn.apply(v) - fn.apply(w);
+				if(sign > 0) return 1;
+				else if(sign < 0) return -1;
+				else return 0;
+			});
 			//2. Centroid
 			X = Matrix.concatenateRowVector(x);
 			X.deleteRowVector(n);
@@ -59,22 +64,5 @@ public class NelderMead {
 		}
 		return x[0];
 	}
-	
-	class CompareVectorByFunction implements Comparator<Vector>{
-		private Function<Vector, Double> fn;
-		
-		public CompareVectorByFunction(Function<Vector, Double> fn) {
-			this.fn = fn;
-		}
-		
-		public int compare(Vector v, Vector w) {
-			if(fn.apply(v) > fn.apply(w)){
-				return 1;
-			} else if(fn.apply(v) < fn.apply(w)) {
-				return -1;
-			} else {
-				return 0;
-			}
-		}
-	}
+
 }

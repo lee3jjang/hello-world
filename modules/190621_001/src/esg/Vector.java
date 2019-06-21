@@ -1,6 +1,6 @@
 package esg;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class Vector {
 	private double[] data;
@@ -146,7 +146,7 @@ public class Vector {
 	}
 	
 	// Map
-	public Vector map(Function<Double, Double> fn) {
+	public Vector map(UnaryOperator<Double> fn) {
 		int n = this.data.length;
 		double[] v = new double[n];
 		for(int i=0; i<n; i++)

@@ -1,16 +1,17 @@
 package esg;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class LevenbergMarquardt {
 	private double eps = 1e-15;
 	private double mu0 = 0.01;
 	
-	public Vector optimize(Function<Vector, Vector> fn, Vector p0, Vector y) {
+	public Vector optimize(UnaryOperator<Vector> fn, Vector p0, Vector y) {
 		Matrix J;
 		Vector delta;
 		Function<Vector, Matrix> jacobian = new JacobianFunction(x -> fn.apply(x).scalarMultiply(-1.));
-		Function<Vector, Vector> residual = p -> y.subtract(fn.apply(p));
+		UnaryOperator<Vector> residual = p -> y.subtract(fn.apply(p));
 		Vector p = p0.copy();
 		Vector r = residual.apply(p0);
 		double E;

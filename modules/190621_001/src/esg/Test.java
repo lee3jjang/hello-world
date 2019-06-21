@@ -1,5 +1,7 @@
 package esg;
 
+import java.util.function.Function;
+
 public class Test {
 	public static void test() {
 		
@@ -140,7 +142,7 @@ public class Test {
 		double[] initialState = new double[] {0.0258,  -0.0104, 0.0032};
 		double[][] initialError = new double[][] {{1., 0., 0.}, {0., 1., 0.}, {0., 0., 1.}};
 		double[] initialParam = new double[] {0.60731, 0.001, 0.12844, 0.34156, 0.70498, 0.04029, -0.02018, -0.00900, 0.00653, -0.00610, 0.00420, 0.00009, -0.00468, 0.01036};
-		MultivariateFunction fn = x -> {
+		Function<Vector, Double> fn = x -> {
 			DynamicNelsonSiegel dns = new DynamicNelsonSiegel(x.getData());
 			dns.setState(initialState, initialError);
 			double logL = dns.estimate(measurements);
@@ -173,10 +175,10 @@ public class Test {
 		HullWhite hw = new HullWhite(alpha, sigma, sw);
 	
 		System.out.println(sw.forwardBtw(0, 1/12.));
-		MultivariateFunction g = x -> x.sum();
+		Function<Vector, Double> g = x -> x.sum();
 		Vector z = new Vector(new double[] {4., 2.});
-		System.out.println(g.value(z));
-		MultivariateVectorFunction h = new GradientFunction(g);
+		System.out.println(g.apply(z));
+		Function<Vector, Vector> h = new GradientFunction(g);
 		//MultivariateMatrixFunction hh = new JacobianFunction(h);
 		Matrix M = new Matrix(blackVol);
 		Vector kk = new Vector(term);
