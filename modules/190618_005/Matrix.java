@@ -472,6 +472,17 @@ public class Matrix {
 		return new StringMatrix(A);
 	}
 	
+	// Matrix to Vector
+	public Vector toVector() {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		double[] w = new double[n*m];
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				w[n*i+j] = this.data[i][j];
+		return new Vector(w);
+	}
+	
 	
 	/* Matrix Utilities */
 	

@@ -207,6 +207,18 @@ public class Vector {
 		return new StringVector(v);
 	}
 	
+	// Vector to Matrix
+	public Matrix toMatrix(int n) {
+		int m = this.data.length/n;
+		if(this.data.length%n != 0)
+			throw new RuntimeException("유효하지 않은 열 길이입니다.");
+		double[][] A = new double[m][n];
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				A[i][j] = this.data[n*i+j];
+		return new Matrix(A);
+	}
+	
 	
 	/* Vector Utilities */
 	

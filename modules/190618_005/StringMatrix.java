@@ -221,6 +221,17 @@ public class StringMatrix {
 		return new Matrix(A);
 	}
 	
+	// StringMatrix to StringVector
+	public StringVector toStringVector() {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		String[] w = new String[n*m];
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				w[n*i+j] = this.data[i][j];
+		return new StringVector(w);
+	}
+	
 	
 	/* Matrix Utilities */
 	

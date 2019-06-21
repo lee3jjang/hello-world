@@ -176,9 +176,18 @@ public class Main {
 		double sigma = 0.005;
 		HullWhite hw = new HullWhite(alpha, sigma, sw);
 	
-		(new Matrix(hw.simulation(10, 2))).print();
 		System.out.println(sw.forwardBtw(0, 1/12.));
-	
+		MultivariateFunction g = x -> x.sum();
+		Vector z = new Vector(new double[] {4., 2.});
+		System.out.println(g.value(z));
+		MultivariateVectorFunction h = new GradientFunction(g);
+		//MultivariateMatrixFunction hh = new JacobianFunction(h);
+		Matrix M = new Matrix(blackVol);
+		Vector kk = new Vector(term);
+		kk.print();
+		kk.toMatrix(5).print();
+		
+		
 	}
 }
 
