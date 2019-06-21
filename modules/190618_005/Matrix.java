@@ -461,6 +461,42 @@ public class Matrix {
 		return this.applyRowVector(x -> x.std());
 	}
 	
+	// Concatenate Matrix by Row
+	public Matrix concatenateByRow(Matrix A) {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		int r = A.getRowDimension();
+		int s = A.getColumnDimension();
+		if(n != s)
+			throw new RuntimeException("유효하지 않은 열 길이입니다.");
+		double[][] B = new double[m+r][n];
+		for(int j=0; j<n; j++) {
+			for(int i=0; i<m; i++)
+				B[i][j] = this.data[i][j];
+			for(int i=0; i<r; i++)
+				B[m+i][j] = A.getEntry(i, j);
+		}
+		return new Matrix(B);
+	}
+	
+	// Concatenate Matrix by Column
+	public Matrix concatenateByColumn(Matrix A) {
+		int m = this.data.length;
+		int n = this.data[0].length;
+		int r = A.getRowDimension();
+		int s = A.getColumnDimension();
+		if(m != r)
+			throw new RuntimeException("유효하지 않은 행 길이입니다.");
+		double[][] B = new double[m][n+s];
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++)
+				B[i][j] = this.data[i][j];
+			for(int j=0; j<s; j++)
+				B[i][n+j] = A.getEntry(i, j);
+		}
+		return new Matrix(B);	
+	}
+	
 	// double to String
 	public StringMatrix toStringMatrix() {
 		int m = this.data.length;
@@ -518,7 +554,7 @@ public class Matrix {
 		return createOneMatrix(n, n);
 	}
 	
-	// Concatenate(row)
+	// Concatenate Row Vectors
 	public static Matrix concatenateRowVector(Vector[] x) {
 		int m = x.length;
 		int n = x[0].getDimension();
@@ -528,7 +564,7 @@ public class Matrix {
 		return M;
 	}
 	
-	// Concatenate(Column)
+	// Concatenate Column Vectors
 	public static Matrix concatenateColumnVector(Vector[] x) {
 		int m = x[0].getDimension();
 		int n = x.length;

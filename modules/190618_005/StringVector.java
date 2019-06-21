@@ -146,7 +146,7 @@ public class StringVector {
 	
 	/* Vector Utilities */
 	
-	// Zero Vector of n	
+	// Zero Vector of n
 	public static StringVector createZeroVector(int n) {
 		StringVector w = new StringVector(new String[n]);
 		w.set("");

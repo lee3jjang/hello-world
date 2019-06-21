@@ -18,10 +18,10 @@ public class NelderMead {
 		Matrix X;
 		Vector[] x = new Vector[n+1];
 		x[0] = x0.copy();
-		for(int i=1; i<n+1; i++) {
+		for(int i=0; i<n; i++) {
 			temp = x0.copy();
-			temp.addToEntry(i-1, norm.sample());
-			x[i] = temp;
+			temp.addToEntry(i, norm.sample());
+			x[i+1] = temp;
 		}
 		while(Matrix.concatenateColumnVector(x).applyColumnVector(fn).std() > this.eps) {
 			x[0].print();    // Temp
