@@ -84,6 +84,11 @@ public class StringMatrix {
 		return this.data[i][j];
 	}
 	
+	// Get Entry using Name
+	public String getEntry(List<String> rowName, List<String> columnName) {
+		return this.getEntry(this.getRowNames().indexOf(rowName), this.getColumnNames().indexOf(columnName));
+	}
+	
 	// Get Data
 	public String[][] getData() {
 		return this.data.clone();
@@ -168,6 +173,11 @@ public class StringMatrix {
 		return new StringVector(w);
 	}
 	
+	// Get Row Vector using Name
+	public StringVector getRowVector(List<String> rowName) {
+		return this.getRowVector(this.getRowNames().indexOf(rowName));
+	}
+	
 	// Get Column Vector
 	public StringVector getColumnVector(int j) {
 		int m = this.data.length;
@@ -175,6 +185,11 @@ public class StringMatrix {
 		for(int i=0; i<m; i++)
 			w[i] = this.data[i][j];
 		return new StringVector(w);
+	}
+	
+	// Get Column Vector using Name
+	public StringVector getColumnVector(List<String> columnName) {
+		return this.getColumnVector(this.getColumnNames().indexOf(columnName));
 	}
 	
 	// Add Row Vector
@@ -206,6 +221,7 @@ public class StringMatrix {
 		}
 		this.data = A;
 	}
+	
 	// Delete Row Vector
 	public void deleteRowVector(int k) {
 		int m = this.data.length;
@@ -366,6 +382,22 @@ public class StringMatrix {
 		return new Matrix(A, indexList, columnList);
 	}
 	
+	// Sort Row Vectors by Column
+	public void sort(int j) {
+		Arrays.sort(this.data, (v, w) -> v[j].compareTo(w[j]));
+	}
+
+	// Sort Row Vectors by Columns
+	public void sort(int[] columns) {
+		Arrays.sort(this.data, (v, w) -> {
+			int value = 0;
+			int n = columns.length;
+			for(int j=0; j<n; j++) {
+				value += v[columns[j]].compareTo(w[columns[j]])*Math.pow(10, n-j-1);
+			}
+			return value;
+		});
+	}
 	
 	/* Matrix Utilities */
 	

@@ -81,6 +81,11 @@ public class Matrix {
 		return this.data[i][j];
 	}
 	
+	// Get Entry using Name
+	public double getEntry(List<String> rowName, List<String> columnName) {
+		return this.getEntry(this.getRowNames().indexOf(rowName), this.getColumnNames().indexOf(columnName));
+	}
+	
 	// Get Data
 	public double[][] getData() {
 		return this.data.clone();
@@ -386,6 +391,11 @@ public class Matrix {
 		return new Vector(w);
 	}
 	
+	// Get Row Vector using Name
+	public Vector getRowVector(List<String> rowName) {
+		return this.getRowVector(this.getRowNames().indexOf(rowName));
+	}
+	
 	// Get Column Vector
 	public Vector getColumnVector(int j) {
 		int m = this.data.length;
@@ -393,6 +403,11 @@ public class Matrix {
 		for(int i=0; i<m; i++)
 			w[i] = this.data[i][j];
 		return new Vector(w);
+	}
+	
+	// Get Column Vector using Name
+	public Vector getColumnVector(List<String> columnName) {
+		return this.getColumnVector(this.getColumnNames().indexOf(columnName));
 	}
 	
 	// Add Row Vector
@@ -424,6 +439,7 @@ public class Matrix {
 		}
 		this.data = A;
 	}
+	
 	// Delete Row Vector
 	public void deleteRowVector(int k) {
 		int m = this.data.length;
