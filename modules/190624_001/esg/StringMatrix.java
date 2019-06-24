@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -383,12 +384,12 @@ public class StringMatrix {
 	}
 	
 	// Sort Row Vectors by Column
-	public void sort(int j) {
+	public void sortRowVector(int j) {
 		Arrays.sort(this.data, (v, w) -> v[j].compareTo(w[j]));
 	}
 
 	// Sort Row Vectors by Columns
-	public void sort(int[] columns) {
+	public void sortRowVector(int[] columns) {
 		Arrays.sort(this.data, (v, w) -> {
 			int value = 0;
 			int n = columns.length;
@@ -397,6 +398,21 @@ public class StringMatrix {
 			}
 			return value;
 		});
+	}
+	
+	// Filter Row Vector
+	public StringMatrix filterRowVector(Predicate<StringVector> fn) {
+		int m = this.data.length;
+		List<String[]> A = new ArrayList<>();
+		for(int i=0; i<m; i++)
+			if(fn.test(this.getRowVector(i)))
+				A.add(this.data[i]);
+		return new StringMatrix(A.toArray(new String[0][0]));
+	}
+
+	// Filter Row Vector (2)
+	public StringMatrix filterRowVector(int j, String value) {
+		return this.filterRowVector(v -> v.getEntry(j).equals(value));
 	}
 	
 	/* Matrix Utilities */

@@ -17,6 +17,7 @@ import java.util.Iterator;
 import org.hibernate.Session;
 
 import entity.IrCurveHis;
+import esg.CoveredBond;
 import esg.Matrix;
 import esg.StringMatrix;
 import esg.StringVector;
@@ -45,22 +46,18 @@ public class Main {
 			data[i][3] = String.valueOf(curveHis.get(i).getIntRate());
 		}
 		StringMatrix M = new StringMatrix(data);
-		
-		int[] index = new int[] {2, 0};
-		int[] columns = new int[] {1};
-		int values = 3;
-		
-		Matrix N = M.pivotTableAvg(index, columns, values);
-		//N.getColumnVector(Arrays.asList("E110")).print();
-		
-		//Arrays.sort(N.getColumnVector(Arrays.asList("E110")).getData());
-		
-		//List<String> k = Arrays.asList("A110", "A100", "E110");
-		//Collections.sort(k, (str1, str2) -> str1.compareTo(str2));
-		
-		//System.out.println(k);
-		M.sort(new int[] {3, 1});
-		M.print();
+		M.sortRowVector(new int[] {0, 1});
+		Matrix ktbRates = M.filterRowVector(1, "A100").pivotTableSum(new int[] {0}, new int[] {2}, 3);
+		Matrix kdbRates = M.filterRowVector(1, "E110").pivotTableSum(new int[] {0}, new int[] {2}, 3);
+		double[] maturity = ktbRates.getColumnNames()
+			.stream()
+			.mapToDouble(x -> Double.parseDouble(x.get(0).replaceAll("M",  ""))/12.)
+			.toArray();
+		CoveredBond cb = new CoveredBond(maturity, kdbRates.getData(), ktbRates.getData(), ktbRates.getRowVector(ktbRates.getRowDimension()-1).getData());
+		cb.calcBeta();
+		double[] v = Vector.createRangeVector(241).scalarMultiply(1./12.).getData();
+		Vector w = new Vector(cb.getLiquidPremium(v));
+		w.print();
 		
 	}
 

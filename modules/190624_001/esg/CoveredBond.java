@@ -20,7 +20,7 @@ public class CoveredBond {
 		Vector inputRates = kdbRates.eleDivide(ktbRates).meanColumnVector().scalarAdd(-1.).eleMultiply(ktbRatesCurrent);
 		int n = inputRates.getDimension();
 		inputRates.setEntry(0, 0.);
-		inputRates.setEntry(n, 0.);
+		inputRates.setEntry(n-1, 0.);
 		this.model = new PolynomialRegression(maturity.getData(), inputRates.getData(), 4);
 	}
 	

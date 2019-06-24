@@ -223,6 +223,12 @@ public class Vector {
 	
 	
 	/* Vector Utilities */
+	public static Vector createRangeVector(int n) {
+		double[] v = new double[n];
+		for(int i=0; i<n; i++)
+			v[i] = i;
+		return new Vector(v);
+	}
 	
 	// Zero Vector of n	
 	public static Vector createZeroVector(int n) {
