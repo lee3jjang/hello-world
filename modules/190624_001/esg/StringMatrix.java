@@ -2,6 +2,7 @@ package esg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -395,6 +396,18 @@ public class StringMatrix {
 			int n = columns.length;
 			for(int j=0; j<n; j++) {
 				value += v[columns[j]].compareTo(w[columns[j]])*Math.pow(10, n-j-1);
+			}
+			return value;
+		});
+	}
+
+	// Sort Row Vectors by Columns
+	public void sortRowVector(int[] columns, Comparator<String> comp) {
+		Arrays.sort(this.data, (v, w) -> {
+			int value = 0;
+			int n = columns.length;
+			for(int j=0; j<n; j++) {
+				value += comp.compare(v[columns[j]], w[columns[j]])*Math.pow(10, n-j-1);
 			}
 			return value;
 		});

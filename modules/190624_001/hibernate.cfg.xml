@@ -12,6 +12,8 @@
       <mapping class="entity.IrCurveHis"/>
       <mapping class="entity.TransitionMatrix"/>
       
+      <!-- Target Table -->
+      <mapping class="entity.CorpCumPd"/>
       
    </session-factory>
 </hibernate-configuration>

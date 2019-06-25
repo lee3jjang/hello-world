@@ -7,9 +7,11 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -31,8 +33,10 @@ public class Main {
 	private static Session session;
 
 	public static void main(String[] args) {
-		session = HibernateUtil.getSessionFactory().openSession();
-		job51();
+		//session = HibernateUtil.getSessionFactory().openSession();
+		Job51_CorporatePd.run("201712");
+		
+
 	}
 	
 	public static void job20() {
@@ -94,6 +98,7 @@ public class Main {
 		Matrix transMatX = transMat.power(k);
 		Vector cumPd = transMatX.getColumnVector(m);
 //		transMatX.print();
+		
 		
 		transMat.deleteRowVector(m);
 		Matrix transMat2 = transMat.copy();

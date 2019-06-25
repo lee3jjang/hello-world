@@ -45,6 +45,17 @@ public class Vector {
 		return this.data.clone();
 	}
 	
+	// Delete Element
+	public void deleteElement(int k) {
+		int n = this.data.length;
+		double[] w = new double[n-1];
+		for(int i=0; i<k; i++)
+			w[i] = this.data[i];
+		for(int i=k; i<n-1; i++)
+			w[i] = this.data[i+1];
+		this.data = w;
+	}
+	
 	// Get Dimension
 	public int getDimension() {
 		return this.data.length;
