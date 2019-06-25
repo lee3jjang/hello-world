@@ -415,6 +415,7 @@ public class StringMatrix {
 		return this.filterRowVector(v -> v.getEntry(j).equals(value));
 	}
 	
+	
 	/* Matrix Utilities */
 	
 	// Zero Matrix of m x n	

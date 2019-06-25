@@ -3,7 +3,6 @@ package process;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
@@ -17,11 +16,13 @@ import java.util.Iterator;
 import org.hibernate.Session;
 
 import entity.IrCurveHis;
+import entity.TransitionMatrix;
 import esg.CoveredBond;
 import esg.Matrix;
 import esg.StringMatrix;
 import esg.StringVector;
 import esg.Vector;
+import util.ECreditGrade;
 import util.HibernateUtil;
 
 
@@ -30,8 +31,12 @@ public class Main {
 	private static Session session;
 
 	public static void main(String[] args) {
-		
 		session = HibernateUtil.getSessionFactory().openSession();
+		job51();
+	}
+	
+	public static void job20() {
+		
 		session.beginTransaction();
 		List<IrCurveHis> curveHis = session.createQuery("FROM IrCurveHis").getResultList();
 		session.getTransaction().commit();
@@ -58,6 +63,45 @@ public class Main {
 		double[] v = Vector.createRangeVector(241).scalarMultiply(1./12.).getData();
 		Vector w = new Vector(cb.getLiquidPremium(v));
 		w.print();
+		
+	}
+	
+	public static void job51() {
+		
+		session.beginTransaction();
+		List<TransitionMatrix> tm = session.createQuery("FROM TransitionMatrix").getResultList();
+		session.getTransaction().commit();
+		session.close();
+		
+		List<TransitionMatrix> tm2017 = tm.stream().filter(r -> r.getBaseYyyy().equals("2017")).collect(toList());
+		
+		int n = tm2017.size();
+		String[][] data = new String[n][3];
+		for(int i=0; i<n; i++) {
+			data[i][0] = tm2017.get(i).getFromCrdGrdCd();
+			data[i][1] = tm2017.get(i).getToCrdGrdCd();
+			data[i][2] = String.valueOf(tm2017.get(i).getProbRate());
+		}
+		StringMatrix M = new StringMatrix(data);
+		Matrix transMat = M.pivotTableAvg(new int[] {0}, new int[] {1}, 2);
+		
+		int m = transMat.getRowDimension();
+		transMat.print();
+		transMat.addRowVector(m, Vector.createUnitVector(m, m+1));
+		
+		
+		int k = 100;
+		Matrix transMatX = transMat.power(k);
+		Vector cumPd = transMatX.getColumnVector(m);
+//		transMatX.print();
+		
+		transMat.deleteRowVector(m);
+		Matrix transMat2 = transMat.copy();
+		Vector pd = transMat2.getColumnVector(m); 
+		transMat2.deleteColumnVector(m);
+		Vector fwdPd = transMat2.power(k-1).operate(pd);
+		cumPd.print();
+		fwdPd.print();
 		
 	}
 

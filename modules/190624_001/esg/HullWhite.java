@@ -84,7 +84,7 @@ public class HullWhite {
 		Function<Vector, Double> fn = x -> {
 			HullWhite hw = new HullWhite(x.getEntry(0), x.getEntry(1), this.curve);
 			hw.calculateHullWhiteRS();
-			return Math.sqrt(hw.curve.blackRS.subtract(hw.HullWhiteRS).power(2).sum());
+			return Math.sqrt(hw.curve.blackRS.subtract(hw.HullWhiteRS).ebePower(2).sum());
 		};
 		NelderMead nm = new NelderMead();
 		return nm.optimize(fn, x0).getData();

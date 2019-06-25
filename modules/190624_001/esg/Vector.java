@@ -223,10 +223,18 @@ public class Vector {
 	
 	
 	/* Vector Utilities */
+	// Vector of 1...n
 	public static Vector createRangeVector(int n) {
 		double[] v = new double[n];
 		for(int i=0; i<n; i++)
 			v[i] = i;
+		return new Vector(v);
+	}
+	
+	// Unit Vector
+	public static Vector createUnitVector(int i, int n) {
+		double[] v = new double[n];
+		v[i] = 1.;
 		return new Vector(v);
 	}
 	

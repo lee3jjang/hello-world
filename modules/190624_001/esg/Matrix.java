@@ -161,9 +161,27 @@ public class Matrix {
 		return new Matrix(B);
 	}
 	
+	// Element-Wise Power of Matrix
+	public Matrix ebePower(int p) {
+		return this.map(x -> Math.pow(x, p));
+	}
+	
 	// Power of Matrix
 	public Matrix power(int p) {
-		return this.map(x -> Math.pow(x, p));
+		
+		if(p==0) {
+			int n = this.data.length;
+			return createIdentityMatrix(n);
+		} else if(p >= 1) {
+			Matrix A;
+			A = this.copy();
+			for(int i=0; i<p-1; i++)
+				A = A.multiply(this);
+			return A;
+		} else {
+			throw new RuntimeException("유효하지 않은 차수입니다.");
+		}
+		
 	}
 	
 	// Print Matrix

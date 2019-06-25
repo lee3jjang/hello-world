@@ -10,6 +10,8 @@
       <property name="hibernate.physical_naming_strategy">util.CustomPhysicalNamingStrategy</property>
       
       <mapping class="entity.IrCurveHis"/>
+      <mapping class="entity.TransitionMatrix"/>
+      
       
    </session-factory>
 </hibernate-configuration>
