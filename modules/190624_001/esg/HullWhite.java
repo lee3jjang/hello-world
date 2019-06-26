@@ -79,8 +79,8 @@ public class HullWhite {
 			}
 	}
 	
-	public double[] calibration(double alpha, double sigma) {
-		Vector x0 = new Vector(new double[] {alpha, sigma});
+	public double[] calibrate() {
+		Vector x0 = new Vector(new double[] {this.alpha, this.sigma});
 		Function<Vector, Double> fn = x -> {
 			HullWhite hw = new HullWhite(x.getEntry(0), x.getEntry(1), this.curve);
 			hw.calculateHullWhiteRS();
@@ -99,11 +99,11 @@ public class HullWhite {
 		int n = (int)(max/dt);
 		double t = 0.;
 		NormalDistribution norm = new NormalDistribution();
-		double[] N = norm.sample(n);
+		double[] N = norm.sample(n-1);
 		double dW;
-		Vector r = new Vector(new double[n+1]);
+		Vector r = new Vector(new double[n]);
 		r.setEntry(0, Math.log(1+this.curve.forwardBtw(0, dt)));
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<n-1; i++) {
 			dW = Math.sqrt(dt)*N[i];
 			r.setEntry(i+1, r.getEntry(i)+(this.theta(t)-this.alpha*r.getEntry(i))*dt+this.sigma*dW);
 			t += dt;

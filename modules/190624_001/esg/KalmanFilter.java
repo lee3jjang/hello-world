@@ -10,6 +10,7 @@ public class KalmanFilter {
 	
 	private Vector state;
 	private Matrix error;
+	private Matrix measurements;
 	
 	public KalmanFilter() {}
 	
@@ -23,18 +24,39 @@ public class KalmanFilter {
 		this.R = new Matrix(R);
 		
 	}
+	
 	// Set State and Error
 	public void setState(double[] state, double[][] error) {
 		this.state = new Vector(state);
 		this.error = new Matrix(error);
 	}
 	
-	// Estimate
-	public double estimate(double[][] measurements) {
+	// Get State
+	public double[] getState() {
+		return this.state.getData();
+	}
+
+	// Get Error
+	public double[][] getError() {
+		return this.error.getData();
+	}
+	
+	// Set Measurements
+	public void setMeasurements(double[][] measurements) {
+		this.measurements = new Matrix(measurements);
+	}
+	
+	// Get Measurements
+	public double[][] getMeasurements(){
+		return this.measurements.getData();
+	}
+	
+	// Get Log-Likelihood
+	public double getLogLikelihood() {
 		double value = 0.;
-		int m = measurements.length;
+		int m = this.measurements.getRowDimension();
 		for(int i=0; i<m; i++) {
-			value += this.next(measurements[i]);
+			value += this.next(this.measurements.getRowVector(i));
 		}
 		return value;
 	}
@@ -71,11 +93,10 @@ public class KalmanFilter {
 	}
 
 	// Next State and Error
-	private double next(double[] measurement) {
-		Vector zMeas = new Vector(measurement);
+	private double next(Vector zMeas) {
 		
 		// Prediction
-		Vector xPred = this.A.operate(this.state).add(u);
+		Vector xPred = this.A.operate(this.state).add(this.u);
 		Matrix PPred = A.multiply(this.error).multiply(A.transpose()).add(Q);
 		
 		// Update
@@ -88,21 +109,15 @@ public class KalmanFilter {
 		this.error = PUpdate;
 		
 		// Log-Likelihood
-		double detF = F.determinant();	 /* Determinant 계산이 느려서 안 됨 */
+		/*
+		double detF = F.determinant();	 // Determinant 계산이 느려서 안 됨
 		
 		if(detF <= 0.)
 			detF = 1e-15;
 		double logL = -0.5*Math.log(2*Math.PI)-0.5*Math.log(detF)-0.5*v.dotProduct(F.inverse().operate(v));
 		return logL;
-	}
-	
-	// Get State
-	public double[] getState() {
-		return this.state.getData();
+		*/
+		return 1;
 	}
 
-	// Get Error
-	public double[][] getError() {
-		return this.error.getData();
-	}
 }

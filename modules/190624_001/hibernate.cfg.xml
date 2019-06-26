@@ -10,11 +10,14 @@
       <property name="hibernate.physical_naming_strategy">util.CustomPhysicalNamingStrategy</property>
       
       <mapping class="entity.IrCurveHis"/>
+      <mapping class="entity.SwaptionVol"/>
       <mapping class="entity.TransitionMatrix"/>
       
       <!-- Target Table -->
       <mapping class="entity.CorpCumPd"/>
       <mapping class="entity.BottomupDcnt"/>
+      <mapping class="entity.RiskNeutralSce"/>
+      <mapping class="entity.RealWorldSce"/>
       
    </session-factory>
 </hibernate-configuration>

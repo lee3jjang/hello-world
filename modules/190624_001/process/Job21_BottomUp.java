@@ -23,8 +23,8 @@ public class Job21_BottomUp {
 		
 		//1. Select Data
 		String query = "FROM IrCurveHis"
-				+ "		   WHERE BASE_DATE >= :startYymm"
-				+ "			   AND BASE_DATE <= :endYymm";
+				+ "			WHERE baseDate >= :startYymm"
+				+ "				AND baseDate <= :endYymm";
 		List<IrCurveHis> dataEntity = session.createQuery(query, IrCurveHis.class)
 				.setParameter("startYymm", FinUtil.addMonth(bssd, -35))
 				.setParameter("endYymm", FinUtil.addMonth(bssd, 1))
@@ -76,7 +76,8 @@ public class Job21_BottomUp {
 			resultEntity.setBaseYymm(bssd);
 			resultEntity.setIrCurveId(irCurveId);
 			resultEntity.setMatCd(String.format("M%04d", i+1));
-			resultEntity.setRfRate(sw.spotRates.getData()[i]);
+			resultEntity.setRiskFreeSpotRate(sw.spotRates.getData()[i]);
+			resultEntity.setRiskFreeFwdRate(sw.forwardRates.getData()[i]);
 			resultEntity.setLiqPrem(liqPrem[i+1]);
 			resultEntity.setRiskAdjSpotRate(riskAdjRfSpotRate[i+1]);
 			resultEntity.setRiskAdjFwdRate(riskAdjRfFwdRate[i]);
