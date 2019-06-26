@@ -45,6 +45,18 @@ public class Vector {
 		return this.data.clone();
 	}
 	
+	// Insert Element
+	public void insertElement(int k, double value) {
+		int n = this.data.length;
+		double[] w = new double[n+1];
+		for(int i=0; i<k; i++)
+			w[i] = this.data[i];
+		w[k] = value;
+		for(int i=k+1; i<n+1; i++)
+			w[i] = this.data[i-1];
+		this.data = w;
+	}
+	
 	// Delete Element
 	public void deleteElement(int k) {
 		int n = this.data.length;

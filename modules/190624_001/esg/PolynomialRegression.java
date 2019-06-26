@@ -27,6 +27,13 @@ public class PolynomialRegression {
 		return this.beta.getData();
 	}
 	
+	public double predict(double regressors) {
+		double[] v = new double[this.order+1];
+		for(int j=0; j<this.order+1; j++)
+			v[j] = Math.pow(regressors, j);
+		return (new Vector(v)).dotProduct(this.beta);
+	}
+	
 	public double[] predict(double[] regressors) {
 		int n = regressors.length;
 		double[][] A = new double[n][this.order+1];

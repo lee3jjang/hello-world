@@ -1,7 +1,6 @@
 package process;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,17 +18,20 @@ import util.HibernateUtil;
 
 public class Job51_CorporatePd {
 	public static void run(String bssd) {
+		
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		
 		//1. Select Data
 		String baseYyyy = bssd.substring(0, 4);
-		String query =  "FROM TransitionMatrix WHERE baseYyyy = :baseYyyy";
+		String query =  "FROM TransitionMatrix"
+				+ "			WHERE baseYyyy = :baseYyyy"
+				+ "				AND TM_TYPE = 'STM1'";
 		List<TransitionMatrix> dataEntity = session.createQuery(query, TransitionMatrix.class)
 				.setParameter("baseYyyy", baseYyyy)
 				.getResultList();
 		
-		//1. Data -> StringMatrix -> Matrix
+		//2. Data -> StringMatrix -> Input Data
 		int n = dataEntity.size();
 		String[][] data = new String[n][3];
 		for(int i=0; i<n; i++) {
@@ -48,7 +50,7 @@ public class Job51_CorporatePd {
 		Matrix tm = dataMatrix.pivotTableAvg(new int[] {0}, new int[] {1}, 2);
 		StringVector grades = new StringVector(tm.getRowNames().stream().map(x -> x.get(0)).collect(Collectors.toList()).toArray(new String[0]));
 		
-		//2. Cumulative Probability of Default Calculation
+		//3. Cumulative Probability of Default Calculation
 		int m = tm.getRowDimension();
 		Matrix tmAddDefault = tm.copy();
 		tmAddDefault.addRowVector(m, Vector.createUnitVector(m, m+1));
@@ -66,7 +68,7 @@ public class Job51_CorporatePd {
 		}
 		Matrix cumPdMatrix = Matrix.concatenateRowVector(cumPd);
 		
-		//3. Forward Probability of Default Calculation
+		//4. Forward Probability of Default Calculation
 		Matrix tmDeleteDefault = tm.copy();
 		tmDeleteDefault.deleteColumnVector(m);
 		Matrix tmFwdPower = Matrix.createIdentityMatrix(m);
@@ -79,13 +81,13 @@ public class Job51_CorporatePd {
 		}
 		Matrix fwdPdMatrix = Matrix.concatenateRowVector(fwdPd);
 		
-		//4. Insert Data
+		//5. Insert Data
 		CorpCumPd resultEntity;
 		int r = cumPdMatrix.getRowDimension();
 		int s = cumPdMatrix.getColumnDimension();
 		for(int i=0; i<r; i++) {
-			resultEntity = new CorpCumPd();
 			for(int j=0; j<s; j++) {
+				resultEntity = new CorpCumPd();
 				resultEntity.setBaseYymm(bssd);
 				resultEntity.setGradeCode(ECreditGrade.getECreditGrade(grades.getEntry(j)).getLegacyCode());
 				resultEntity.setMatCd(String.format("M%04d", (i+1)*12));
@@ -93,10 +95,11 @@ public class Job51_CorporatePd {
 				resultEntity.setFwdPd(fwdPdMatrix.getEntry(i, j));
 				resultEntity.setLastModifiedBy("Job51");
 				resultEntity.setLastUpdateDate(LocalDateTime.now().toString());
+				session.saveOrUpdate(resultEntity);
 			}
-			session.saveOrUpdate(resultEntity);
 		}
 		session.getTransaction().commit();
+		
 		session.close();
 		
 	}	

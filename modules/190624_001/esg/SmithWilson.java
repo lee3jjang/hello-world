@@ -6,6 +6,7 @@ import java.util.function.UnaryOperator;
 
 public class SmithWilson {
 	public final double tau = 0.25;
+	public final double dt = 1./12.;
 	
 	public Vector term;
 	public Vector rate;
@@ -216,14 +217,15 @@ public class SmithWilson {
 	
 	// Generate Rates
 	private void generateRates(int max) {
-		int l = (int)(max/tau)+1;
+		int l = (int)(max/dt);
 		double[] mat = new double[l];
 		for(int i=0; i<l; i++)
-			mat[i] = i*tau;
+			mat[i] =(i+1)*dt;
 		maturities = new Vector(mat);
 		spotRates = spot(maturities);
 		bondPrices = bond(maturities, 0);
-		forwardRates = forward(maturities, 0).map(s -> Math.exp(s)-1);
+		//forwardRates = forward(maturities, 0).map(s -> Math.exp(s)-1);
+		forwardRates = maturities.map(m -> forwardBtw(m-dt, m));
 	}
 	
 	// Generate Forward Swap Cash Flow
