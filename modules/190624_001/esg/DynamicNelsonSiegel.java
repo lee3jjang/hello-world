@@ -63,6 +63,7 @@ public class DynamicNelsonSiegel extends KalmanFilter {
 		return nm.optimize(fn, x0).getData();
 	}
 	
+	// Generate Spot Rates
 	public double[][][] generateSpotRate(int n, int t) {
 		double[][][] values = new double[n][t][1200];
 		double[][] rates = new double[n][t];

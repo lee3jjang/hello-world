@@ -10,7 +10,6 @@ import entity.RealWorldSce;
 import esg.DynamicNelsonSiegel;
 import esg.Matrix;
 import esg.StringMatrix;
-import esg.Vector;
 import util.FinUtil;
 import util.HibernateUtil;
 
@@ -60,7 +59,7 @@ public class Job15_RealWorldScenario {
 		}
 		
 		//4. Simulation
-		int numSce = 2;
+		int numSce = 200;
 		int numWeek = (int)(1/dt)*1;
 		int numMat = 1200;
 		dns.setMaturity(maturity);
@@ -86,6 +85,12 @@ public class Job15_RealWorldScenario {
 					session.saveOrUpdate(resultEntity);
 				}
 			}
+			if((i+1)%5 == 0) {
+				System.out.println("Flush and Clear");
+				session.flush();
+				session.clear();
+			}
+				
 		}
 		session.getTransaction().commit();
 		
