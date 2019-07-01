@@ -92,7 +92,7 @@ public class Job31_DiscRateStatsInternal {
 		}
 		StringMatrix dataMatrix3 = new StringMatrix(data3);
 		dataMatrix3.sortRowVector(new int[] {0, 1});
-		Matrix y = dataMatrix3.pivotTableAvg(new int[] {0}, new int[] {1}, 2);
+		Matrix y = dataMatrix3.pivotTableAvg(0, 1, 2);
 		
 		//3. Beta Calculation
 		int k = y.getColumnDimension();
@@ -109,7 +109,7 @@ public class Job31_DiscRateStatsInternal {
 			resultEntity = new DiscRateStats();
 			resultEntity.setBaseYymm(bssd);
 			resultEntity.setDiscRateCalcTyp("I");
-			resultEntity.setIntRateCd(y.getColumnNames().get(i).get(0));
+			resultEntity.setIntRateCd(y.getColumnNames().get(i));
 			resultEntity.setIndepnVariable("M0060");
 			resultEntity.setDepnVariable("BASE_DISC");
 			resultEntity.setRegrCoef(betaMatrix.getEntry(i, 0));

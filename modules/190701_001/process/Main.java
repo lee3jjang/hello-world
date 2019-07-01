@@ -5,7 +5,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
+		
 		String bssd = "201712";
+		
 		
 		/*	
 		 *	--------------- Job 14 ---------------
@@ -71,7 +73,7 @@ public class Main {
 		 * 			EAS_INFLATION
 		 * --------------------------------------
 		 */
-		Job41_Inflation.run(bssd);
+//		Job41_Inflation.run(bssd);
 		
 		
 		
@@ -84,7 +86,7 @@ public class Main {
 		 * 			EAS_CORP_CRD_GRD_CUM_PD
 		 * --------------------------------------
 		 */
-		Job51_CorporatePd.run(bssd);
+//		Job51_CorporatePd.run(bssd);
 		
 		
 		
@@ -97,7 +99,7 @@ public class Main {
 		 * 			EAS_INDI_CRD_GRD_CUM_PD
 		 * --------------------------------------
 		 */
-		Job52_IndividualPd.run(bssd);
+//		Job52_IndividualPd.run(bssd);
 		
 		
 		
@@ -110,7 +112,35 @@ public class Main {
 		 * 			EAS_SEG_LGD
 		 * --------------------------------------
 		 */
-		Job53_SegLgd.run(bssd);
+//		Job53_SegLgd.run(bssd);
+		
+		
+		
+		/*
+		 * --------------- Job 54 ---------------
+		 * 조기상환율 생성
+		 * Source Table :
+		 * 			EAS_XXX_XXX
+		 * Target Table :
+		 * 			EAS_SEG_PREP_RATE
+		 * --------------------------------------
+		 */
+//		Job54_SegPrepay.run(bssd);
+		
+		
+		
+		/*
+		 * --------------- Job 55 ---------------
+		 * 신용 스프레드 생성
+		 * Source Table :
+		 * 			EAS_IR_CURVE
+		 * 			EAS_IR_CURVE_HIS
+		 * Target Table :
+		 * 			EAS_CRD_SPREAD
+		 * --------------------------------------
+		 */
+		Job55_CreditSpread.run(bssd);
+		
 		
 		
 	}

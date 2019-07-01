@@ -8,8 +8,8 @@ import java.util.function.UnaryOperator;
 
 public class Matrix {
 	private double[][] data;
-	private List<List<String>> rowNames;
-	private List<List<String>> columnNames;
+	private List<String> rowNames;
+	private List<String> columnNames;
 	
 	// Initialization with data
 	public Matrix(double[][] data) {
@@ -22,7 +22,7 @@ public class Matrix {
 	}
 	
 	// Initialization with data and names
-	public Matrix(double[][] data, List<List<String>> rowNames, List<List<String>> columnNames) {
+	public Matrix(double[][] data, List<String> rowNames, List<String> columnNames) {
 		int m = data.length;
 		int n = data[0].length;
 		this.data = new double[m][n];
@@ -34,22 +34,22 @@ public class Matrix {
 	}
 	
 	// Get Row Names
-	public List<List<String>> getRowNames() {
+	public List<String> getRowNames() {
 		return this.rowNames;
 	}
 
 	// Set Row Names
-	public void setRowNames(List<List<String>> v) {
+	public void setRowNames(List<String> v) {
 		this.rowNames = new ArrayList<>(v);
 	}
 	
 	// Get Column Names
-	public List<List<String>> getColumnNames() {
+	public List<String> getColumnNames() {
 		return this.columnNames;
 	}
 	
 	// Set Column Names
-	public void setColumnNames(List<List<String>> v) {
+	public void setColumnNames(List<String> v) {
 		this.columnNames = new ArrayList<>(v);
 	}
 	
@@ -83,7 +83,7 @@ public class Matrix {
 	}
 	
 	// Get Entry using Name
-	public double getEntry(List<String> rowName, List<String> columnName) {
+	public double getEntry(String rowName, String columnName) {
 		return this.getEntry(this.getRowNames().indexOf(rowName), this.getColumnNames().indexOf(columnName));
 	}
 	
@@ -535,7 +535,7 @@ public class Matrix {
 	}
 	
 	// Get Row Vector using Name
-	public Vector getRowVector(List<String> rowName) {
+	public Vector getRowVector(String rowName) {
 		return this.getRowVector(this.getRowNames().indexOf(rowName));
 	}
 	
@@ -549,7 +549,7 @@ public class Matrix {
 	}
 	
 	// Get Column Vector using Name
-	public Vector getColumnVector(List<String> columnName) {
+	public Vector getColumnVector(String columnName) {
 		return this.getColumnVector(this.getColumnNames().indexOf(columnName));
 	}
 	
@@ -657,6 +657,23 @@ public class Matrix {
 	// Row Standard Deviation of Matrix
 	public Vector stdRowVector() {
 		return this.applyRowVector(x -> x.std());
+	}
+	
+	// Unpivot
+	public StringMatrix unpivotTable() {
+		if(this.rowNames == null || this.columnNames == null)
+			throw new RuntimeException("행 혹은 열의 이름이 없습니다.");
+		int m = this.data.length;
+		int n = this.data[0].length;
+		String[][] A = new String[m*n][3];
+		for(int j=0; j<n; j++) {
+			for(int i=0; i<m; i++) {
+				A[n*i+j][0] = this.rowNames.get(i);
+				A[n*i+j][1] = this.columnNames.get(j);
+				A[n*i+j][2] = String.valueOf(this.data[i][j]);
+			}
+		}
+		return new StringMatrix(A);
 	}
 	
 	// Concatenate Matrix by Row

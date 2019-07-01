@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class StringMatrix {
 	private String[][] data;
-	private List<List<String>> rowNames;
-	private List<List<String>> columnNames;
+	private List<String> rowNames;
+	private List<String> columnNames;
 	
 	// Initialization with data
 	public StringMatrix(String[][] data) {
@@ -26,7 +26,7 @@ public class StringMatrix {
 	}
 	
 	// Initialization with data and names
-	public StringMatrix(String[][] data, List<List<String>> rowNames, List<List<String>> columnNames) {
+	public StringMatrix(String[][] data, List<String> rowNames, List<String> columnNames) {
 		int m = data.length;
 		int n = data[0].length;
 		this.data = new String[m][n];
@@ -38,22 +38,22 @@ public class StringMatrix {
 	}
 	
 	// Get Row Names
-	public List<List<String>> getRowNames() {
+	public List<String> getRowNames() {
 		return this.rowNames;
 	}
 
 	// Set Row Names
-	public void setRowNames(List<List<String>> v) {
+	public void setRowNames(List<String> v) {
 		this.rowNames = new ArrayList<>(v);
 	}
 	
 	// Get Column Names
-	public List<List<String>> getColumnNames() {
+	public List<String> getColumnNames() {
 		return this.columnNames;
 	}
 	
 	// Set Column Names
-	public void setColumnNames(List<List<String>> v) {
+	public void setColumnNames(List<String> v) {
 		this.columnNames = new ArrayList<>(v);
 	}
 	
@@ -87,7 +87,7 @@ public class StringMatrix {
 	}
 	
 	// Get Entry using Name
-	public String getEntry(List<String> rowName, List<String> columnName) {
+	public String getEntry(String rowName, String columnName) {
 		return this.getEntry(this.getRowNames().indexOf(rowName), this.getColumnNames().indexOf(columnName));
 	}
 	
@@ -176,7 +176,7 @@ public class StringMatrix {
 	}
 	
 	// Get Row Vector using Name
-	public StringVector getRowVector(List<String> rowName) {
+	public StringVector getRowVector(String rowName) {
 		return this.getRowVector(this.getRowNames().indexOf(rowName));
 	}
 	
@@ -190,7 +190,7 @@ public class StringMatrix {
 	}
 	
 	// Get Column Vector using Name
-	public StringVector getColumnVector(List<String> columnName) {
+	public StringVector getColumnVector(String columnName) {
 		return this.getColumnVector(this.getColumnNames().indexOf(columnName));
 	}
 	
@@ -293,83 +293,53 @@ public class StringMatrix {
 	}
 	
 	// Pivot Table Sum
-	public Matrix pivotTableSum(int[] index, int[] columns, int values) {
-		
-		// Index List
-		List<List<String>> indexList = Arrays.stream(this.getData())
-				.map(x -> {
-					List<String> idx = new ArrayList<>();
-					for(int i : index)
-						idx.add(x[i]);
-					return idx;
-					}).distinct().collect(Collectors.toList());
-		
-		// Column List			
-		List<List<String>> columnList = Arrays.stream(this.getData())
-				.map(x -> {
-					List<String> col = new ArrayList<>();
-					for(int c : columns)
-						col.add(x[c]);
-					return col;
-					}).distinct().collect(Collectors.toList());
+	public Matrix pivotTableSum(int index, int column, int values) {
+			// Index List
+			List<String> indexList = Arrays.stream(this.getData())
+					.map(x -> x[index])
+					.distinct().collect(Collectors.toList());
+			
+			// Column List			
+			List<String> columnList = Arrays.stream(this.getData())
+					.map(x -> x[column])
+					.distinct().collect(Collectors.toList());
 
-		// Aggregated Values
-		Map<List<List<String>>, Double> str = Arrays.stream(this.getData()).collect(Collectors.groupingBy(df -> {
-			List<String> idx = new ArrayList<>();
-			List<String> col = new ArrayList<>();
-			List<List<String>> indexColumn = new ArrayList<>();
-			for(Integer i : index)
-				idx.add(df[i]);
-			for(Integer c : columns)
-				col.add(df[c]);
-			indexColumn.add(idx);
-			indexColumn.add(col);
-			return indexColumn;
-		}, Collectors.summingDouble(df -> Double.parseDouble(df[values]))));
+			// Aggregated Values
+			Map<List<String>, Double> str = Arrays.stream(this.getData()).collect(Collectors.groupingBy(df -> {
+				List<String> indexColumn = new ArrayList<>();
+				indexColumn.add(df[index]);
+				indexColumn.add(df[column]);
+				return indexColumn;
+			}, Collectors.summingDouble(df -> Double.parseDouble(df[values]))));
+			
+			// Set Result
+			int m = indexList.size();
+			int n = columnList.size();
+			double[][] A = new double[m][n];
+			for(int i=0; i<m; i++)
+				for(int j=0; j<n; j++)
+					A[i][j] = str.get(Arrays.asList(indexList.get(i), columnList.get(j))); 
 		
-		// Set Result
-		int m = indexList.size();
-		int n = columnList.size();
-		double[][] A = new double[m][n];
-		for(int i=0; i<m; i++)
-			for(int j=0; j<n; j++)
-				A[i][j] = str.get(Arrays.asList(indexList.get(i), columnList.get(j))); 
-	
-		return new Matrix(A, indexList, columnList);
+			return new Matrix(A, indexList, columnList);
 	}
 	
-	// Pivot Table Sum
-	public Matrix pivotTableAvg(int[] index, int[] columns, int values) {
-		
+	// Pivot Table Average
+	public Matrix pivotTableAvg(int index, int column, int values) {
 		// Index List
-		List<List<String>> indexList = Arrays.stream(this.getData())
-				.map(x -> {
-					List<String> idx = new ArrayList<>();
-					for(int i : index)
-						idx.add(x[i]);
-					return idx;
-					}).distinct().collect(Collectors.toList());
+		List<String> indexList = Arrays.stream(this.getData())
+				.map(x -> x[index])
+				.distinct().collect(Collectors.toList());
 		
 		// Column List			
-		List<List<String>> columnList = Arrays.stream(this.getData())
-				.map(x -> {
-					List<String> col = new ArrayList<>();
-					for(int c : columns)
-						col.add(x[c]);
-					return col;
-					}).distinct().collect(Collectors.toList());
+		List<String> columnList = Arrays.stream(this.getData())
+				.map(x -> x[column])
+				.distinct().collect(Collectors.toList());
 
 		// Aggregated Values
-		Map<List<List<String>>, Double> str = Arrays.stream(this.getData()).collect(Collectors.groupingBy(df -> {
-			List<String> idx = new ArrayList<>();
-			List<String> col = new ArrayList<>();
-			List<List<String>> indexColumn = new ArrayList<>();
-			for(Integer i : index)
-				idx.add(df[i]);
-			for(Integer c : columns)
-				col.add(df[c]);
-			indexColumn.add(idx);
-			indexColumn.add(col);
+		Map<List<String>, Double> str = Arrays.stream(this.getData()).collect(Collectors.groupingBy(df -> {
+			List<String> indexColumn = new ArrayList<>();
+			indexColumn.add(df[index]);
+			indexColumn.add(df[column]);
 			return indexColumn;
 		}, Collectors.averagingDouble(df -> Double.parseDouble(df[values]))));
 		

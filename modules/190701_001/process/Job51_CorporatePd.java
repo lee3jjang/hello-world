@@ -3,7 +3,6 @@ package process;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 
@@ -46,8 +45,8 @@ public class Job51_CorporatePd {
 			else return -1;
 		};
 		dataMatrix.sortRowVector(new int[] {0,  1}, comp);
-		Matrix tm = dataMatrix.pivotTableAvg(new int[] {0}, new int[] {1}, 2);
-		StringVector grades = new StringVector(tm.getRowNames().stream().map(x -> x.get(0)).collect(Collectors.toList()).toArray(new String[0]));
+		Matrix tm = dataMatrix.pivotTableAvg(0, 1, 2);
+		StringVector grades = new StringVector(tm.getRowNames().toArray(new String[0]));
 		
 		//3. Cumulative Probability of Default Calculation
 		int m = tm.getRowDimension();

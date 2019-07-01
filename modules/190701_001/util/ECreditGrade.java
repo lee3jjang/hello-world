@@ -26,7 +26,9 @@ public enum ECreditGrade {
 	B(15, "B", "115"),
 	BM(16, "B-", "116"),
 	
-	CCC(17, "CCC", "117"),
+	CCCP(17, "CCC+", "118"),
+	CCC(18, "CCC", "119"),
+	CCCM(19, "CCC", "120"),
 	D(90, "D", "900"),
 	NR(99, "NR", "999");
 	

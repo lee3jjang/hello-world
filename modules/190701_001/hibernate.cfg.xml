@@ -20,6 +20,7 @@
       <mapping class="entity.IndiCrdGrdPdUd"/>
       <mapping class="entity.InflationUd"/>
       <mapping class="entity.SegLgdUd"/>
+      <mapping class="entity.IrCurve"/>
       
       <!-- Target Tables -->
       <mapping class="entity.RiskNeutralSce"/>
@@ -29,6 +30,7 @@
       <mapping class="entity.IndiCumPd"/>
       <mapping class="entity.Inflation"/>
       <mapping class="entity.SegLgd"/>
+      <mapping class="entity.CreditSpread"/>
       
    </session-factory>
 </hibernate-configuration>

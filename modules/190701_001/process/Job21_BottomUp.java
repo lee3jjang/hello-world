@@ -41,11 +41,11 @@ public class Job21_BottomUp {
 		}
 		StringMatrix dataMatrix = new StringMatrix(data);
 		dataMatrix.sortRowVector(new int[] {1, 0, 2});
-		Matrix ktbRates = dataMatrix.filterRowVector(1, "A100").pivotTableSum(new int[] {0}, new int[] {2}, 3);
-		Matrix kdbRates = dataMatrix.filterRowVector(1, "E110").pivotTableSum(new int[] {0}, new int[] {2}, 3);
+		Matrix ktbRates = dataMatrix.filterRowVector(1, "A100").pivotTableSum(0, 2, 3);
+		Matrix kdbRates = dataMatrix.filterRowVector(1, "E110").pivotTableSum(0, 2, 3);
 		Vector ktbRatesCurrent = ktbRates.getRowVector(ktbRates.getRowDimension()-1);
 		Vector maturity =  new Vector(ktbRates.getColumnNames().stream()
-			.mapToDouble(x -> Double.parseDouble(x.get(0).replaceAll("M",  ""))/12.)
+			.mapToDouble(x -> Double.parseDouble(x.replaceAll("M",  ""))/12.)
 			.toArray());
 		
 		//3. Risk-Free Term Structure Calculation

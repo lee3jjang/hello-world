@@ -40,8 +40,8 @@ public class Job15_RealWorldScenario {
 		}
 		StringMatrix dataMatrix = new StringMatrix(data);
 		dataMatrix.sortRowVector(new int[] {0, 1});
-		Matrix ktbRates = dataMatrix.pivotTableAvg(new int[] {0}, new int[] {1}, 2);
-		double[] maturity = ktbRates.getColumnNames().stream().mapToDouble(x -> Double.parseDouble(x.get(0).replaceAll("M", ""))/12.).toArray();
+		Matrix ktbRates = dataMatrix.pivotTableAvg(0, 1, 2);
+		double[] maturity = ktbRates.getColumnNames().stream().mapToDouble(x -> Double.parseDouble(x.replaceAll("M", ""))/12.).toArray();
 		
 		//3. Calibration
 		double dt = 1./52.;

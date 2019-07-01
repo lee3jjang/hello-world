@@ -79,7 +79,7 @@ public class Job14_RiskNeutralScenario {
 		dataMatrix2.sortRowVector(new int[] {0, 1}, comp);
 		double[] swaptionMaturity = Arrays.stream(dataMatrix2.getColumnVector(0).getData()).distinct().mapToDouble(Double::parseDouble).toArray();
 		double[] swapTenor = Arrays.stream(dataMatrix2.getColumnVector(1).getData()).distinct().mapToDouble(Double::parseDouble).toArray();
-		double[][] blackVol = dataMatrix2.pivotTableAvg(new int[] {0}, new int[] {1}, 2).getData();
+		double[][] blackVol = dataMatrix2.pivotTableAvg(0, 1, 2).getData();
 		
 		
 		//3. Calibration
