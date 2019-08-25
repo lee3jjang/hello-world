@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>416</width>
+    <height>434</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>370</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>30</y>
+     <width>351</width>
+     <height>304</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="25" column="0">
+     <widget class="QCheckBox" name="si021">
+      <property name="text">
+       <string>(SI021) 자본적정성</string>
+      </property>
+     </widget>
+    </item>
+    <item row="23" column="0">
+     <widget class="QCheckBox" name="si007">
+      <property name="text">
+       <string>(SI007) 요약손익계산서</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="27" column="0">
+     <widget class="QCheckBox" name="si115">
+      <property name="text">
+       <string>(SI115) 유동성</string>
+      </property>
+     </widget>
+    </item>
+    <item row="24" column="0">
+     <widget class="QCheckBox" name="si123">
+      <property name="text">
+       <string>(SI123) 책임준비금 적립현황</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="22" column="0">
+     <widget class="QCheckBox" name="si004">
+      <property name="text">
+       <string>(SI004) 요약재무상태표(부채 및 자본)</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="28" column="0">
+     <widget class="QCheckBox" name="si020">
+      <property name="text">
+       <string>(SI020) 사업실적표</string>
+      </property>
+     </widget>
+    </item>
+    <item row="29" column="0">
+     <widget class="QCheckBox" name="si136">
+      <property name="text">
+       <string>(SI136) 보험종류별 경과손해율</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="31" column="0">
+     <widget class="QCheckBox" name="si138">
+      <property name="text">
+       <string>(SI138) 보험종목별 보유보험료 현황</string>
+      </property>
+     </widget>
+    </item>
+    <item row="19" column="0">
+     <widget class="QCheckBox" name="si001">
+      <property name="text">
+       <string>(SI001) 임직원 및 설계사현황</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="30" column="0">
+     <widget class="QCheckBox" name="si137">
+      <property name="text">
+       <string>(SI137) 주요손익현황</string>
+      </property>
+     </widget>
+    </item>
+    <item row="20" column="0">
+     <widget class="QCheckBox" name="si002">
+      <property name="text">
+       <string>(SI002) 점포 및 대리점현황</string>
+      </property>
+     </widget>
+    </item>
+    <item row="32" column="0">
+     <widget class="QCheckBox" name="si139">
+      <property name="text">
+       <string>(SI139) RBC 비율</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="21" column="0">
+     <widget class="QCheckBox" name="si003">
+      <property name="text">
+       <string>(SI003) 요약재무상태표(자산)</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="26" column="0">
+     <widget class="QCheckBox" name="si114">
+      <property name="text">
+       <string>(SI114) 경영효율지표</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
