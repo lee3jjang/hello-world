@@ -25,8 +25,6 @@ def _send_message(text, access_token, chat_id):
             https://hexoul.blogspot.com/2017/11/telegram-sendmessage-api.html
     '''
     
-#     access_token = '904469782:AAGKkT977saP5wOVcAl18lALBYbqhKx6V28'
-#     chat_id = '904981301'
     # url = 'https://api.telegram.org/bot{}/getUpdates'.format(access_token)
     url = 'https://api.telegram.org/bot{}/sendMessage'.format(access_token)
     res = requests.post(url, data={'chat_id': chat_id, 'text': text})
