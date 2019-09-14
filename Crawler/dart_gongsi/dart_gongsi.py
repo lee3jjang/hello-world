@@ -111,7 +111,7 @@ def run(filter_text, access_token, chat_id, delay=5):
         raise Exception('지연시간을 5초 이상으로 설정해야 합니다')
     now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
     program = __name__ + '.' + inspect.stack()[0].function
-    print('({}) {}: 프로그램을 실행합니다. (키워드: {})'.format(now, program, filter_text))
+    print('({}) {}: 프로그램을 실행합니다. (키워드: [{}], 딜레이: {}초)'.format(now, program, filter_text, delay))
     prev_time = ''
     while(True):
          # 모니터링
