@@ -6,7 +6,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 
-def send_message(text, access_token, chat_id):
+def _send_message(text, access_token, chat_id):
     '''
         Description:
             DartGongsi로 text 전송
@@ -32,7 +32,8 @@ def send_message(text, access_token, chat_id):
     res = requests.post(url, data={'chat_id': chat_id, 'text': text})
     if res.status_code == 200:
         now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-        print('({}) {}: 성공적으로 전송되었습니다.'.format(now, __name__ + '.' + inspect.stack()[0].function))
+        program = __name__ + '.' + inspect.stack()[0].function
+        print('({}) {}: 성공적으로 전송되었습니다.'.format(now, program))
         
         
 def _make_message(**kwargs):
@@ -109,7 +110,8 @@ def run(filter_text, access_token, chat_id, delay=5):
     if delay < 5:
         raise Exception('지연시간을 5초 이상으로 설정해야 합니다')
     now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-    print('({}) 프로그램을 실행합니다. (키워드: {})'.format(now, filter_text))
+    program = __name__ + '.' + inspect.stack()[0].function
+    print('({}) {}: 프로그램을 실행합니다. (키워드: {})'.format(now, program, filter_text))
     prev_time = ''
     while(True):
          # 모니터링
@@ -117,13 +119,14 @@ def run(filter_text, access_token, chat_id, delay=5):
 
         # 결과전송
         now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        
         if (rows != '') and (current_time != prev_time):
-            print('({}) 키워드 [{}] (으)로 검색된 내용이 있습니다. ({})'.format(now, filter_text, current_time))
+            print('({}) {}: 키워드 [{}] (으)로 검색된 내용이 있습니다. ({})'.format(now, program, filter_text, current_time))
             text = _make_message(filter_text = filter_text, column_name = column_name, rows = rows)
-            send_message(text, access_token, chat_id)
+            _send_message(text, access_token, chat_id)
             prev_time = current_time
         elif current_time == prev_time:
-            print('({}) 키워드 [{}] 검색결과가 이전과 중복됩니다.'.format(now, filter_text))
+            print('({}) {}: 키워드 [{}] 검색결과가 이전과 중복됩니다.'.format(now, program, filter_text))
         else:
-            print('({}) 키워드 [{}] (으)로 아무것도 검색되지 않았습니다.'.format(now, filter_text))
+            print('({}) {}: 키워드 [{}] (으)로 아무것도 검색되지 않았습니다.'.format(now, program, filter_text))
         time.sleep(delay)
