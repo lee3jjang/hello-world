@@ -6,7 +6,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 
-def send_message(text):
+def send_message(text, access_token, chat_id):
     '''
         Description:
             DartGongsi로 text 전송
@@ -25,8 +25,8 @@ def send_message(text):
             https://hexoul.blogspot.com/2017/11/telegram-sendmessage-api.html
     '''
     
-    access_token = '904469782:AAGKkT977saP5wOVcAl18lALBYbqhKx6V28'
-    chat_id = '904981301'
+#     access_token = '904469782:AAGKkT977saP5wOVcAl18lALBYbqhKx6V28'
+#     chat_id = '904981301'
     # url = 'https://api.telegram.org/bot{}/getUpdates'.format(access_token)
     url = 'https://api.telegram.org/bot{}/sendMessage'.format(access_token)
     res = requests.post(url, data={'chat_id': chat_id, 'text': text})
@@ -90,13 +90,15 @@ def _monitoring(filter_text):
     rows = '' if len(gonsi_filtered) == 0 else '\n'.join(list(map(lambda row: ' '.join(row), gonsi_filtered.values)))
     return column_name, rows, base_time
 
-def run(filter_text, delay=5):
+def run(filter_text, access_token, chat_id, delay=5):
     '''
         Description:
             전체 프로그램 실행
         
         Input:
             filter_text: str
+            access_token: str
+            chat_id: str
             delay: int
         
         Example:
@@ -118,7 +120,7 @@ def run(filter_text, delay=5):
         if (rows != '') and (current_time != prev_time):
             print('({}) 키워드 [{}] (으)로 검색된 내용이 있습니다. ({})'.format(now, filter_text, current_time))
             text = _make_message(filter_text = filter_text, column_name = column_name, rows = rows)
-            send_message(text)
+            send_message(text, access_token, chat_id)
             prev_time = current_time
         elif current_time == prev_time:
             print('({}) 키워드 [{}] 검색결과가 이전과 중복됩니다.'.format(now, filter_text))
