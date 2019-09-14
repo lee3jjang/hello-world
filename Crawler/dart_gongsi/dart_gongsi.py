@@ -3,7 +3,6 @@ import requests
 from datetime import datetime
 
 
-# 참고: https://hexoul.blogspot.com/2017/11/telegram-sendmessage-api.html
 def send_message(text):
     '''
         Description:
@@ -30,3 +29,21 @@ def send_message(text):
     if res.status_code == 200:
         now = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         print('({}) {}: 성공적으로 전송되었습니다.'.format(now, __name__ + '.' + inspect.stack()[0].function))
+        
+        
+def make_message(params):
+    '''
+        Description:
+            parameter를 이용해 전송할 text 생성
+        
+        Input:
+            params: dictionary
+        
+        Output:
+            text: str
+            
+        Example:
+            params = {}
+            make_message(params)
+    '''
+    pass
