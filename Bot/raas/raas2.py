@@ -128,6 +128,7 @@ def mkdir2(target):
         os.mkdir(path.abspath(target))
     except FileNotFoundError:
         mkdir2(path.join(path.abspath(target), '..'))
+        os.mkdir(path.abspath(target))
     except FileExistsError:
         pass
     
@@ -152,8 +153,11 @@ def make_tree(source, target, router):
             shutil.copy(file, path.join(target, router[filename]))
         except KeyError:
             raise Exception('\'{}\' 의 경로명이 없습니다'.format(file))
-
+            
+            
 if __name__ == '__main__':
-    router = make_router('Rockstar Games', ignore=['data_0', 'data_1', 'data_2', 'data_3', 'f_000001', 'f_000002', 'f_000003', 'f_000005', 'f_000006', 'f_000008', 'f_000009', 'f_00000a', 'f_00000b', 'f_00000c', 'f_00000d', 'f_00000e', 'f_00000f', 'f_000010', 'index', 'Cookies', 'Cookies-journal', '000003.log', 'CURRENT', 'LOCK', 'LOG', 'MANIFEST-000001', 'LOG.old', 'Visited Links'])
-    compress('Rockstar Games', 'zipfile', 'result', 1.1e6, ignore=['data_0', 'data_1', 'data_2', 'data_3', 'f_000001', 'f_000002', 'f_000003', 'f_000005', 'f_000006', 'f_000008', 'f_000009', 'f_00000a', 'f_00000b', 'f_00000c', 'f_00000d', 'f_00000e', 'f_00000f', 'f_000010', 'index', 'Cookies', 'Cookies-journal', '000003.log', 'CURRENT', 'LOCK', 'LOG', 'MANIFEST-000001', 'LOG.old', 'Visited Links'])
-    make_tree('source', 'tree3', router)
+    source = 'Rockstar Games'
+    ignore = ['data_0', 'data_1', 'data_2', 'data_3', 'f_000001', 'f_000002', 'f_000003', 'f_000005', 'f_000006', 'f_000008', 'f_000009', 'f_00000a', 'f_00000b', 'f_00000c', 'f_00000d', 'f_00000e', 'f_00000f', 'f_000010', 'index', 'Cookies', 'Cookies-journal', '000003.log', 'CURRENT', 'LOCK', 'LOG', 'MANIFEST-000001', 'LOG.old', 'Visited Links']
+    router = make_router(source, ignore=ignore)
+    compress(source, target='zipfile', name='result', max_size=1.1e6, ignore=ignore)
+#     make_tree('zipfile', 'tree', router)
