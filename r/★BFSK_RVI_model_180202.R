@@ -5,9 +5,9 @@ require(ggplot2)
 require(dplyr)
 
 
-#1. µ•¿Ã≈Õ ¿¸√≥∏Æ(Preprocessing)
+#1. Îç∞Ïù¥ÌÑ∞ Ï†ÑÏ≤òÎ¶¨(Preprocessing)
 rm(list=ls())
-benz <- read.table(file='C:/Users/11700205/Documents/µ•¿Ã≈Õ/benz.csv', sep=',', header=TRUE) 
+benz <- read.table(file='C:/Users/11700205/Documents/Îç∞Ïù¥ÌÑ∞/benz.csv', sep=',', header=TRUE) 
 benz <- benz %>% filter(PY>=2000)
 benz <- benz %>% mutate(CERT=ifelse(CERT=='Certificated','Certificated','Normal'))
 benz$MODEL <- as.character(benz$MODEL)
@@ -19,13 +19,13 @@ benz$MODEL <- as.factor(benz$MODEL)
 benz$CERT <- as.factor(benz$CERT)
 
 
-#2. ¬˜∑Æ∞°∞›øπ√¯∏«¸(Log-linear model)
+#2. Ï∞®ÎüâÍ∞ÄÍ≤©ÏòàÏ∏°Î™®Ìòï(Log-linear model)
 Pricing.model <- lm(log(PRICE)~.,data=benz)
 Beta <- Pricing.model$coefficients
 write.csv(Beta,'coefficients.csv')
 
 
-#3. Ω√πƒ∑π¿Ãº«
+#3. ÏãúÎÆ¨Î†àÏù¥ÏÖò
 Trials <- 1000000
 CPO <- benz %>% filter(CERT=='Certificated')
 Insured <- CPO[sample(nrow(CPO), size=Trials, replace=TRUE),]
@@ -34,13 +34,13 @@ mean.km <- benz$KM/(2017.5 - benz$PY)
 mean.km <- mean.km[mean.km>0]
 Insured.3yr <- Insured
 
-# Method 1 : ¡˜∞¸¿˚¿∏∑Œ ¥ı «’∏Æ¿˚¿Ã≥™ Loss∞° ¿€∞‘ ¿‚»˚
+# Method 1 : ÏßÅÍ¥ÄÏ†ÅÏúºÎ°ú Îçî Ìï©Î¶¨Ï†ÅÏù¥ÎÇò LossÍ∞Ä ÏûëÍ≤å Ïû°Ìûò
 #Insured.3yr$PRICE <- Insured.3yr$PRICE*exp(Beta['CERTNormal'])
 #Insured.3yr$PRICE <- Insured.3yr$PRICE*exp(-3*Beta['PY'])
 #Insured.3yr$PRICE <- Insured.3yr$PRICE*exp(3*Beta['KM']*mean.km[sample(NROW(mean.km), size=Trials, replace=TRUE)])
 #Insured.3yr$PRICE <- Insured.3yr$PRICE*exp(rnorm(Trials,mean=0,sd=summary(Pricing.model)$sigma))
 #Res.value <- Insured.3yr$PRICE/Insured$PRICE
-# Method 2 : ¡˜∞¸¿˚¿∏∑Œ ¥˙ «’∏Æ¿˚¿Ã≥™ Loss∞° ≈©∞‘ ¿‚»˜∞Ì, ø‹∫Œµ•¿Ã≈ÕøÕ ¿œ∞¸º∫¿Ã ¿÷¿Ω
+# Method 2 : ÏßÅÍ¥ÄÏ†ÅÏúºÎ°ú Îçú Ìï©Î¶¨Ï†ÅÏù¥ÎÇò LossÍ∞Ä ÌÅ¨Í≤å Ïû°ÌûàÍ≥†, Ïô∏Î∂ÄÎç∞Ïù¥ÌÑ∞ÏôÄ ÏùºÍ¥ÄÏÑ±Ïù¥ ÏûàÏùå
 Insured.3yr$CERT <- 'Normal'
 Insured.3yr$PY <- Insured.3yr$PY - 3
 Insured.3yr$KM <- Insured.3yr$KM + 3*mean.km[sample(NROW(mean.km), size=Trials, replace=TRUE)]
@@ -56,7 +56,7 @@ Discount <- 1.0
 Loss <- pmax(Bound-Discount*X,0)
 
 
-#4. ≈Î∞Ë∑Æ ªÍ√‚
+#4. ÌÜµÍ≥ÑÎüâ ÏÇ∞Ï∂ú
 p <- 0.995
 VaR <- quantile(Loss, 1-(1-p)/Freq)
 TVaR <- mean(Loss[Loss>VaR])
