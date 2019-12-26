@@ -1,0 +1,19 @@
+<html>
+    <head>
+    </head>
+    <body>
+        {% for i in range(10) %}
+        <p>다운로드페이지입니다.</p>
+        {% endfor %}
+        
+        {% if x>=4 %}
+        <p> x={{x}}가 4보다 큽니다</p>
+        {% else %}
+        <p> x={{x}}가 4보다 작아요~</p>
+        {% endif %}
+        
+        <form action='file' method='get'>
+            <button type='submit'>다운하기</button>
+        </form>
+    </body>
+</html>
