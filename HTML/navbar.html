@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+    <!-- navbar-expand-sm : 가로 크기 변경할 때 expand 되는 기능 추가 -->
+    <!-- bg-dark : 네이게이션바의 배경색 -->
+    <!-- justify-content-center : 네이게이션이 가운데로 옮겨짐 -->
+    <nav class="navbar navbar-expand-sm bg-dark justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <!-- nav-link : nav-link 해줘야 버튼이 잘 정렬됨 -->
+                <a href="#" class="nav-link">Link 1</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 2</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 3</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- navbar-light : black text color를 add 하기 위한 태그 -->
+    <nav class="navbar navbar-expand-sm bg-light navbar-light justify-content-center">
+        <!-- navbar-brand : 뭔가 강조하기 위해 쓰임 -->
+        <!-- a: 링크 거는거임 -->
+        <a href="#" class="navbar-brand">
+            <!-- style:"width:100px" : width를 100pdx로 한다 -->
+            <img src="./img/nuno.png" alt="" style="width:100px;">
+        </a>
+        <ul class="navbar-nav">
+            <!-- active : 뭔가 색깔이 바뀜 -->
+            <li class="nav-item active">
+                <a href="#" class="nav-link">Active</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 2</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 3</a>
+            </li>
+            <li class="nav-item">
+                <!-- disabled : 안 눌러짐 -->
+                <a href="#" class="nav-link disabled">Disabled</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- navbar-expand-sm : 없으면 link 없어짐 -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a href="#" class="navbar-brand">Navbar</a>
+        
+        <!-- navbar-toggler : 없으면 아이콘이 이상함 -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- collapse : 없으면 collapse 되어 있지 않음 -->
+        <!-- navbar-collapse : 없으면 눌렀을 때 배치가 이상함 -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#"" class="nav-link">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"" class="nav-link">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"" class="nav-link">Link</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <a href="#" class="navbar-brand">Logo</a>
+
+        <!-- navbar-nav : 없으면 li마다 점 나옴 -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 1</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link 2</a>
+            </li>
+
+            <!-- dropdown -->
+            <li class="nav-item dropdown">
+                <!-- dropdown-toggle -->
+                <a href="#" class="nav-link dropdown-toggle" id="navbardrop" data-toggle="dropdown">
+                    Dropdown link
+                </a>
+                <!-- dropdown-menu -->
+                <div class="dropdown-menu">
+                    <!-- dropdown-item : 없으면 글자 이상해짐 -->
+                    <a href="#" class="dropdown-item">Link 1</a>
+                    <a href="#" class="dropdown-item">Link 2</a>
+                    <a href="#" class="dropdown-item">Link 3</a>
+                </div>
+            </li>
+
+        </ul>
+    </nav>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <form action="/action_page.php" class="form-inline">
+            <!-- form-control : 텍스트 넣는 곳이 동그랗게 됨 -->
+            <!-- mr-sm-2 : margin right small 2(5까지 가능) -->
+            <input type="text" class="form-control mr-sm-2" placeholder="Search">
+            <button class="btn btn-success" type="submit">Search</button>
+        </form>
+    </nav>
+    
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <form action="/action_page.php" class="form-inline">
+            <!-- input-group 없으면 하나로 안 묶임 -->
+            <div class="input-group">
+                <!-- input-group-prepend : 왼쪽만 동그람 -->
+                <div class="input-group-prepend">
+                    <!-- input-group-text : 없으면 회색 이런거 없음 -->
+                    <span class="input-group-text">@</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username">
+            </div>
+        </form>
+
+        <!-- navbar-text : 없이하면 텍스트 이상하게 나옴 -->
+        <span class="navbar-text">
+            Navbar text
+        </span>
+    </nav>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
