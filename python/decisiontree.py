@@ -3,6 +3,58 @@ import numpy as np
 from collections import Counter
 from statistics import mode
 
+class AdaBoost:
+
+    def __init__(self, n):
+        self.models = None
+        self.n = n
+
+    def predict(self, X):
+        # Predict
+        y_pred_ensemble = list()
+        for i in range(len(self.models)):
+            y_pred_ensemble.append(self.models[i][0].predict(X))
+        y_pred_ensemble = np.r_[y_pred_ensemble].T
+
+        keys = dict()
+        indices = dict()
+        for idx, key in enumerate(np.unique(y_pred_ensemble)):
+            keys[key] = idx
+            indices[idx] = key
+
+        y_pred = np.zeros(shape=(len(X), len(keys)))
+        for i in range(len(X)):
+            for j in range(len(self.models)):
+                
+                y_pred[i, keys[y_pred_ensemble[i][j]]] += self.models[j][1]
+        y_pred = np.array([indices[i] for i in np.argmax(y_pred, axis=1)])
+        return y_pred
+
+    def train(self, X, y):
+        models = list()
+        for _ in range(self.n):
+
+            # Train
+            model = Stump()
+            model.train(X, y)
+
+            # Predict
+            y_pred = model.predict(X)
+
+            # Sample Weight
+            total_error = sum(y_pred!=y)/len(y)
+            amt_to_say = 0.5*np.log((1-total_error)/total_error)
+            weight = np.where(y_pred!=y, np.exp(amt_to_say), np.exp(-amt_to_say))
+            weight /= weight.sum()
+            models.append((model, amt_to_say))
+
+            # Resampling
+            sample = np.random.choice(len(y), len(y), p=weight)
+            X = X[sample]
+            y = y[sample]
+        
+        self.models = models
+
 class Stump:
 
     def __init__(self):
@@ -86,62 +138,16 @@ if __name__ == '__main__':
     with open('./data/iris.csv', 'r') as f:
         data = [line for line in csv.reader(f)]
         data = data[1:]
-    X = [x[:3] for x in data]
-    X_sample = X = np.asarray(X, dtype=float)
-    y_sample = y = np.asarray([x[4] for x in data])
+    X = [x[:4] for x in data]
+    X = np.asarray(X, dtype=float)
+    y = np.asarray([x[4] for x in data])
 
-    models = list()
-    for _ in range(10):
+    model = AdaBoost(30)
+    model.train(X, y)
 
-        # Train
-        model = Stump()
-        model.train(X_sample, y_sample)
-        
+    # for i in range(len(model.models)):
+    #     print('Amount to say: {}'.format(model.models[i][1]))
+    #     print(model.models[i][0])
 
-        # Predict
-        y_pred = model.predict(X_sample)
-
-        # Sample Weight
-        total_error = sum(y_pred!=y_sample)/len(y_sample)
-        amt_to_say = 0.5*np.log((1-total_error)/total_error)
-        weight = np.where(y_pred!=y_sample, np.exp(amt_to_say), np.exp(-amt_to_say))
-        weight /= weight.sum()
-        models.append((model, amt_to_say))
-
-        
-
-        # Resampling
-        sample = np.random.choice(len(y_sample), len(y_sample), p=weight)
-        X_sample = X_sample[sample]
-        y_sample = y_sample[sample]
-
-    for i in range(len(models)):
-        print('Amount to Say: {}'.format(models[i][1]))
-        print(models[i][0])
-
-    # Predict
-    y_pred_ensemble = list()
-    for i in range(len(models)):
-        y_pred_ensemble.append(models[i][0].predict(X))
-    y_pred_ensemble = np.r_[y_pred_ensemble].T
-
-    keys = dict()
-    indices = dict()
-    for idx, key in enumerate(np.unique(y_pred_ensemble)):
-        keys[key] = idx
-        indices[idx] = key
-
-    y_pred = np.zeros(shape=(len(X), len(keys)))
-    for i in range(len(X)):
-        for j in range(X.shape[1]):
-            y_pred[i, keys[y_pred_ensemble[i][j]]] += models[j][1]
-    y_pred = np.array([indices[i] for i in np.argmax(y_pred, axis=1)])
-
-    y_pred_0 = models[0][0].predict(X)
-    print(sum(y_pred_0==y)/len(y))
-    print(sum(y_pred==y)/len(y))
-
-    
-
-
-    
+    y_pred = model.predict(X)
+    print(sum(y==y_pred)/len(y))
