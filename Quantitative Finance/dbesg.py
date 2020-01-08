@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.optimize import minimize_scalar
 
+{'Updates' : '2020-01-09'}
+
 class SmithWilson:
     
     """
