@@ -220,7 +220,7 @@ class DynamicNelsonSiegel:
     Example
         -------
             >>> dt, maturity, data = dbesg.sample()
-            >>> dns = dbesg.DynamicNelsonSiegel(dt, maturity)
+            >>> dns = DynamicNelsonSiegel(dt, maturity)
             >>> dns.train(data)
             >>> time, num = 1, 10
             >>> state, measurement = dns.generate(time, num, random_state=20200109)
