@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import minimize_scalar, minimize
 from scipy.stats import norm, multivariate_normal
 
-{'Updates' : '2020-01-14', 'Version': '1.1.0'}
+{'Updates' : '2020-01-14', 'Version': '1.1.1'}
 
 def sample():
     dt = 1/12
@@ -246,23 +246,20 @@ class DynamicNelsonSiegel:
         
     
     def train(self, X, lr=5e-7, tol=1.5e1, disp=False):
-        if self.params == None:
+        if type(self.params) == type(None):
             self.params = self._initial_value(X)
         
         while(True):
             params_grad = self._gradient(self.params, X)
             self.params += lr*params_grad
+            self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
+            self.x0 = self._filtering(self.params, X)[0]
             norm = np.sqrt(sum(params_grad**2))   
             if disp:
                 loglik = self._filtering(self.params, X)[2]
                 print('Norm of Gradient: {:.6f}, Loglikelihood: {:.6f}'.format(norm, loglik))
             if norm < tol:
                 break
-                
-#         self.params = minimize(lambda p: -self._filtering(p, X)[2], x0=params_init, method='nelder-mead', options={'disp': False}).x
-#         self.params = minimize(lambda p: -self._filtering(p, X)[2], x0=params_init, method='BFGS', jac=lambda p: -self._gradient(p, X), options={'disp': False}).x
-        self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
-        self.x0 = self._filtering(self.params, X)[0]
     
     def _system(self, params):
         lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = params
