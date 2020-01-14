@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.optimize import minimize_scalar, minimize
-from scipy.stats import multivariate_normal
+from scipy.stats import norm, multivariate_normal
 
-{'Updates' : '2020-01-09', 'Version': '1.0.0'}
+{'Updates' : '2020-01-14', 'Version': '1.1.0'}
 
 def sample():
     dt = 1/12
@@ -97,7 +97,7 @@ class SmithWilson:
             >>> sw = SmithWilson(np.log(1+ufr), terminal)
             >>> sw.train(X_train, y_train)
 
-            >>> maturity = np.linspace(1/12, 100, 1200)
+            >>> maturity = np.linspace(0, 100, 1201)
             >>> spot_rate = sw.spot(maturity)
             >>> bond_price = sw.bond(maturity)
             >>> forward_rate = sw.forward(maturity)
@@ -120,13 +120,13 @@ class SmithWilson:
             bond0_T = np.exp(-self.ufr*self.terminal) + W_T@zeta
             bond1_T = -self.ufr*np.exp(-self.ufr*self.terminal)+derivW_T@zeta
             forward_T = -bond1_T/bond0_T
-            error = abs(1e-4-abs(forward_T-self.ufr))
+            error = abs(self.ufr-1e-4-forward_T)
             return error
         
         res = minimize_scalar(obj_fun, method='bounded', bounds=(1e-4,1), options={'disp':False})
         self._alpha = res.x
         W = self._wilson(X[:, None], X, self._alpha)
-        self._zeta = (m-mu)@np.linalg.inv(W)
+        self._zeta = np.linalg.inv(W)@(m-mu)
         self._u = X.copy()
         
     def bond(self, t, order=0):
@@ -183,7 +183,7 @@ class NelsonSiegel:
             >>> ns = NelsonSiegel()
             >>> ns.train(X_train, y_train)
 
-            >>> maturity = np.linspace(1/12, 100, 1200)
+            >>> maturity = np.linspace(0, 100, 1201)
             >>> spot_rate = ns.spot(maturity)
             >>> bond_price = ns.bond(maturity)
             >>> forward_rate = ns.forward(maturity)
@@ -221,10 +221,10 @@ class DynamicNelsonSiegel:
         -------
             >>> dt, maturity, data = dbesg.sample()
             >>> dns = DynamicNelsonSiegel(dt, maturity)
-            >>> dns.train(data)
-            >>> time, num = 1, 10
-            >>> state, measurement = dns.generate(time, num, random_state=20200109)
-    
+            >>> dns.train(data, disp=True)
+            >>> time, num = 1, 200
+            >>> scenarios = dns.sample(time, num)
+            >>> mean_reversion, level1, level2, twist1, twist2 = dns.shock(time)
     """
     
     def __init__(self, dt, maturity):
@@ -237,10 +237,30 @@ class DynamicNelsonSiegel:
         self.Q = None
         self.H = None
         self.R = None
+        
+    def set_params(self, params):
+        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33, L0, S0, C0 = params
+        self.x0 = np.array([L0, S0, C0])
+        self.params = params[:-3]
+        self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
+        
     
-    def train(self, X):
-        params_init = self._initial_value(X)
-        self.params = minimize(lambda p: -self._filtering(p, X)[2], x0=params_init, method='nelder-mead', options={'disp': False}).x
+    def train(self, X, lr=5e-7, tol=1.5e1, disp=False):
+        if self.params == None:
+            self.params = self._initial_value(X)
+        
+        while(True):
+            params_grad = self._gradient(self.params, X)
+            self.params += lr*params_grad
+            norm = np.sqrt(sum(params_grad**2))   
+            if disp:
+                loglik = self._filtering(self.params, X)[2]
+                print('Norm of Gradient: {:.6f}, Loglikelihood: {:.6f}'.format(norm, loglik))
+            if norm < tol:
+                break
+                
+#         self.params = minimize(lambda p: -self._filtering(p, X)[2], x0=params_init, method='nelder-mead', options={'disp': False}).x
+#         self.params = minimize(lambda p: -self._filtering(p, X)[2], x0=params_init, method='BFGS', jac=lambda p: -self._gradient(p, X), options={'disp': False}).x
         self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
         self.x0 = self._filtering(self.params, X)[0]
     
@@ -308,11 +328,245 @@ class DynamicNelsonSiegel:
             
         return x_update, P_update, logL
     
-    def generate(self, time, num, random_state=None):        
-        x = self.x0.copy()
-        for _ in range(int(time/self.dt)):
-            x = self.A@x+self.B
-        state = multivariate_normal.rvs(mean=x, cov=time/self.dt*self.Q, size=num, random_state=random_state)
-        measurement_mean = state@self.H.T
-        measurement = np.r_[[multivariate_normal.rvs(mean=measurement_mean[i], cov=self.R, random_state=random_state) for i in range(num)]]
-        return state, measurement
+    def _init_delta(self):
+        dA = np.zeros(shape=(3,3))
+        dB = np.zeros(3)
+        dQ = np.zeros(shape=(3,3))
+        dR = np.zeros(shape=(len(self.maturity), len(self.maturity)))
+        dH = np.zeros(shape=(len(self.maturity), 3))
+        return dA, dB, dQ, dR, dH
+    
+    def _partial_deriv(self, params, deltas, X):
+        A, B, Q, H, R = self._system(params)
+        dA, dB, dQ, dH, dR = deltas
+        
+        x_update = np.zeros(3)
+        P_update = np.identity(3)
+        dx_update = np.zeros(3)
+        dP_update = np.zeros(shape=(3,3))
+        
+#         logL = 0
+        dlogL = 0
+        for z_meas in X:
+            ################ logL 연산 ###################
+            x_prev = x_update
+            P_prev = P_update
+
+            # Predict
+            x_pred = A@x_prev+B
+            P_pred = A@P_prev@A.T+Q
+
+            # Update
+            z_pred = H@x_pred
+            v = z_meas-z_pred
+            F = H@P_pred@H.T+R
+            F_inv = np.linalg.inv(F)
+#             detF = np.linalg.det(F)
+
+            K = P_pred@H.T@F_inv
+            x_update = x_pred+K@v
+            P_update = P_pred-K@H@P_pred
+#             logL += -0.5*np.log(2*np.pi)-0.5*np.log(detF)-0.5*v.T@F_inv@v
+            
+            
+
+            ################ dlogL 연산 ###################
+            dx_prev = dx_update
+            dP_prev = dP_update
+
+            # Predict
+            dx_pred = dA@x_prev + A@dx_prev + dB
+            dP_pred = dA@P_prev@A.T + A@dP_prev@A.T + A@P_prev@dA.T + dQ
+
+            # Update
+            dz_pred = dH@x_pred + H@dx_pred
+            dv = -dz_pred
+            dF = dH@P_pred@H.T + H@dP_pred@H.T + H@P_pred@dH.T + dR
+            dK = dP_pred@H.T@F_inv + P_pred@dH.T@F_inv - P_pred@H.T@(F_inv@dF@F_inv)
+            dx_update = dx_pred + dK@v + K@dv
+            dP_update = dP_pred - (dK@H@P_pred + K@dH@P_pred + K@H@dP_pred)
+            dlogL += -0.5*np.trace(F_inv@dF)-0.5*(dv.T@F_inv@v - v.T@(F_inv@dF@F_inv)@v + v.T@F_inv@dv)
+        
+        return dlogL
+    
+    def _gradient(self, params, X):
+        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = params
+        A, B, Q, H, R = self._system(params)
+        grad = np.zeros(14)
+        
+        # λ
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dH = np.array([[0, np.exp(-lambda_*t)/lambda_-t*(1-np.exp(-lambda_*t))/(lambda_*t)**2, np.exp(-lambda_*t)/lambda_-t*(1-np.exp(-lambda_*t))/(lambda_*t)**2+t*np.exp(-lambda_*t)] for t in self.maturity])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[0] = self._partial_deriv(params, deltas, X)
+        
+        # ε
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dR = 2*eps*np.identity(len(self.maturity))
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[1] = self._partial_deriv(params, deltas, X)
+
+        # κ11
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dA[0][0] = -self.dt
+        dB = theta1*self.dt*np.array([1, 0, 0])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[2] = self._partial_deriv(params, deltas, X)
+
+        # κ22
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dA[1][1] = -self.dt
+        dB = theta2*self.dt*np.array([0, 1, 0])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[3] = self._partial_deriv(params, deltas, X)
+        
+        # κ33
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dA[2][2] = -self.dt
+        dB = theta3*self.dt*np.array([0, 0, 1])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[4] = self._partial_deriv(params, deltas, X)
+
+        # θ1
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dB = kappa11*self.dt*np.array([1, 0, 0])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[5] = self._partial_deriv(params, deltas, X)
+
+        # θ2
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dB = kappa22*self.dt*np.array([0, 1, 0])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[6] = self._partial_deriv(params, deltas, X)
+
+        # θ3
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dB = kappa33*self.dt*np.array([0, 0, 1])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[7] = self._partial_deriv(params, deltas, X)
+
+        # σ11
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.array([
+            [2*sigma11, sigma21, sigma31],
+            [sigma21, 0, 0],
+            [sigma31, 0, 0]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[8] = self._partial_deriv(params, deltas, X)
+        
+        # σ21
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.zeros(shape=(3,3))
+        dQ = np.array([
+            [0, sigma11, 0],
+            [sigma11, 2*sigma21, sigma31],
+            [0, sigma31, 0]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[9] = self._partial_deriv(params, deltas, X)
+
+        # σ22
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.zeros(shape=(3,3))
+        dQ = np.array([
+            [0, 0, 0],
+            [0, 2*sigma22, sigma32],
+            [0, sigma32, 0]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[10] = self._partial_deriv(params, deltas, X)
+        
+        # σ31
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.zeros(shape=(3,3))
+        dQ = np.array([
+            [0, 0, sigma11],
+            [0, 0, sigma21],
+            [sigma11, sigma21, 2*sigma31]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[11] = self._partial_deriv(params, deltas, X)
+        
+        # σ32
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.zeros(shape=(3,3))
+        dQ = np.array([
+            [0, 0, 0],
+            [0, 0, sigma22],
+            [0, sigma22, 2*sigma32]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[12] = self._partial_deriv(params, deltas, X)
+
+        # σ33
+        dA, dB, dQ, dR, dH = self._init_delta()
+        dQ = np.zeros(shape=(3,3))
+        dQ = np.array([
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 2*sigma33]
+        ])
+        deltas = [dA, dB, dQ, dH, dR]
+        grad[13] = self._partial_deriv(params, deltas, X)
+        
+        return grad
+    
+    def predict(self, time):
+        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = self.params
+        
+        x_mean = (np.identity(3)-np.diag(np.exp(-np.array([kappa11, kappa22, kappa33])*time)))@(np.array([theta1, theta2, theta3]) - self.x0)
+        z_mean = x_mean@self.H.T
+        return x_mean, z_mean
+    
+    def sample(self, time, num):
+        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = self.params
+        L = np.array([[sigma11, 0, 0],
+                      [sigma21, sigma22, 0],
+                      [sigma31, sigma32, sigma33]])
+        
+        x_mean, _ = self.predict(time)
+        kappa = np.array([kappa11, kappa22, kappa33])
+        x_cov = (L@L.T)*1/(kappa[:, None]+kappa)*(1-np.exp(-(kappa[:, None]+kappa)*time))
+        x_rand = multivariate_normal.rvs(mean=x_mean, cov=x_cov, size=num)
+        z_mean = x_rand@self.H.T
+        z_rand = np.r_[[multivariate_normal.rvs(mean=z_mean[i], cov=self.R) for i in range(num)]]
+        return z_rand
+    
+    def shock(self, time, significance=0.995):
+        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = self.params
+        L = np.array([[sigma11, 0, 0],
+                      [sigma21, sigma22, 0],
+                      [sigma31, sigma32, sigma33]])
+        
+        # 평균회귀 충격시나리오
+        _, mean_reversion = self.predict(time)
+
+        # M
+        kappa = np.array([kappa11, kappa22, kappa33])
+        M = np.linalg.cholesky((L@L.T)*1/(kappa[:, None]+kappa)*(1-np.exp(-(kappa[:, None]+kappa)*time)))
+
+        # W
+        LOT = 20
+        a = sum([(1-np.exp(-lambda_*t))/(lambda_*t) for t in range(1, LOT+1)])
+        b = sum([(1-np.exp(-lambda_*t))/(lambda_*t)-np.exp(-lambda_*t) for t in range(1, LOT+1)])
+        W = np.diag([LOT, a, b])
+
+        # N
+        N = W@M
+        V = N@N.T
+        # Issue; eigenvector가 eigenvalue 크기 순으로 정렬되어 있는지 확인 필요
+        (lambda3, lambda2, lambda1), e = np.linalg.eigh(V)
+        e3, e2, e1 = e.T
+
+        # 수준/기울기 충격시나리오
+        H = np.array([[1, (1-np.exp(-lambda_*t))/(lambda_*t), (1-np.exp(-lambda_*t))/(lambda_*t)-np.exp(-lambda_*t)] for t in range(1,LOT+1)])
+        S1 = sum(H@M@e1)
+        S2 = sum(H@M@e2)
+        angle = np.arctan(S2/S1)
+        level1 = self.H@(norm.ppf(significance)*(np.cos(angle)*M@e1 + np.sin(angle)*M@e2))
+        level2 = self.H@(-norm.ppf(significance)*(np.cos(angle)*M@e1 + np.sin(angle)*M@e2))
+        twist1 = self.H@(norm.ppf(significance)*(np.cos(angle)*M@e2 - np.sin(angle)*M@e1))
+        twist2 = self.H@(-norm.ppf(significance)*(np.cos(angle)*M@e2 - np.sin(angle)*M@e1))
+        
+        return mean_reversion, level1, level2, twist1, twist2
