@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import minimize_scalar, minimize
 from scipy.stats import norm, multivariate_normal
 
-{'Updates' : '2020-01-14', 'Version': '1.1.1'}
+{'Updates' : '2020-01-16', 'Version': '1.1.2'}
 
 def sample():
     dt = 1/12
@@ -227,9 +227,9 @@ class DynamicNelsonSiegel:
             >>> mean_reversion, level1, level2, twist1, twist2 = dns.shock(time)
     """
     
-    def __init__(self, dt, maturity):
-        self.dt = dt
+    def __init__(self, maturity):
         self.maturity = maturity
+        self.dt = None
         self.params = None
         self.x0 = None
         self.A = None
@@ -238,11 +238,11 @@ class DynamicNelsonSiegel:
         self.H = None
         self.R = None
         
-    def set_params(self, params):
-        lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33, L0, S0, C0 = params
-        self.x0 = np.array([L0, S0, C0])
-        self.params = params[:-3]
-        self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
+#     def set_params(self, params):
+#         lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33, L0, S0, C0 = params
+#         self.x0 = np.array([L0, S0, C0])
+#         self.params = params[:-3]
+#         self.A, self.B, self.Q, self.H, self.R = self._system(self.params)
         
     
     def train(self, X, lr=5e-7, tol=1.5e1, disp=False):
@@ -516,7 +516,8 @@ class DynamicNelsonSiegel:
         z_mean = x_mean@self.H.T
         return x_mean, z_mean
     
-    def sample(self, time, num):
+    def sample(self, time, num, random_seed=None):
+        np.random.seed(random_seed)
         lambda_, eps, kappa11, kappa22, kappa33, theta1, theta2, theta3, sigma11, sigma21, sigma22, sigma31, sigma32, sigma33 = self.params
         L = np.array([[sigma11, 0, 0],
                       [sigma21, sigma22, 0],
