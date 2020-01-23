@@ -1,0 +1,53 @@
+body > img{
+    opacity: 0.6;
+}
+
+.content{
+    margin-top: 40px;
+    text-align: center;
+}
+
+.bgImage{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.form, .grettings{
+    display: none;
+}
+
+.showing {
+    display: block;
+}
+
+input{
+    opacity: 0.4;
+    border:none;
+    margin-bottom: 20px;
+}
+
+.toDoList{
+    all:unset;
+}
+
+.toDoList > li{
+    margin-bottom: 5px;
+}
+
+.toDoList > li > span{
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.toDoList > li > button{
+    all: unset;
+}
+
+.toDoList > li > button:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
