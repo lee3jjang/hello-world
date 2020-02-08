@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header background and menu</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Gothic">
+    <style>
+        a {
+            color: #222;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #390;
+        }
+        li {
+            list-style: none;
+        }
+        body {
+            font-family: 'Nanum Gothic', AppleSDGothicNeo-Regular,'Malgun Gothic','맑은 고딕',dotum,'돋움',sans-serif;
+            line-height: 1.5;
+            font-size: 13px;
+        }
+        body, h1, h2, ul {
+            margin: 0;
+            padding: 0;
+        }
+        #wrap {
+            width: 100%;
+        }
+        #header {
+            background: url(img/header_bg.jpg) center top repeat-x;
+            height: 325px;
+            width: 100%;
+        }
+        #cont_tit {
+            background-color: #eaf7fd;
+        }
+        #cont_ban {
+            background-color: #dceff7;
+        }
+        .container {
+            /* background-color: rgba(255,255,255,0.3); */
+            /* height: inherit; */
+            margin: 0 auto;
+            width: 990px;
+        }
+        .header .header-menu {
+            text-align: right;
+        }
+        .header .header-menu a {
+            color: #fff;
+            padding: 10px 0 10px 13px;
+            display: inline-block;
+        }
+        .header .header-menu a:hover {
+            color: #666;
+        }
+        .header .header-tit {
+            text-align: center;
+        }
+        .header .header-tit h1 {
+            color: #fff;
+            background-color: #4aa8d4;
+            display: inline-block;
+            font-size: 28px;
+            padding: 5px 20px 6px 20px;
+            margin-top: 40px;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+        .header .header-tit a {
+            display: inline-block;
+            background-color: #2698cb;
+            font-size: 18px;
+            color: #fff;
+            padding: 5px 20px 6px 20px;
+            margin-top: -5px;
+        }
+        .header .header-icon {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .header .header-icon a{
+            background: url(img/icon.png);
+            /* background-size: cover; */
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            margin: 0 3px;
+        }
+        .header .header-icon a.icon1 {
+            background-position: 0px 0px;
+        }
+        .header .header-icon a.icon2 {
+            background-position: 0px -60px;
+        }
+        .header .header-icon a.icon3 {
+            background-position: 0px -120px;
+        }
+        .header .header-icon a.icon4 {
+            background-position: 0px -180px;
+        }
+        .header .header-icon a:hover.icon1 {
+            background-position: -60px 0px;
+        }
+        .header .header-icon a:hover.icon2 {
+            background-position: -60px -60px;
+        }
+        .header .header-icon a:hover.icon3 {
+            background-position: -60px -120px;
+        }
+        .header .header-icon a:hover.icon4 {
+            background-position: -60px -180px;
+        }
+        .ir_pm {
+            display: block;
+            font-size: 0;
+        }
+        .tit {
+            position: relative;
+            text-align: center;
+        }
+        .tit h2 {
+            font-size: 40px;
+            color: #2c94c4;
+            letter-spacing: 2px;
+            padding: 5px 0;
+            font-family: 'Nanum Brush Script', cursive;
+        }
+        .tit .btn {
+            display: block;
+            width: 60px;
+            height: 60px;
+            background: url(img/icon.png) no-repeat 0 -600px;
+            position: absolute;
+            right: 0;
+            top: 5px;
+        }
+        /* 배너 */
+        .ban {
+            position: relative;
+            padding: 24px 0 20px;
+        }
+        .ban a.prev {
+            position: absolute;
+            left: -70px;
+            top: 60px;
+            width: 43px;
+            height: 43px;
+            background: url(img/icon.png) -150px 0;
+        }
+        .ban a.next {
+            position: absolute;
+            right: -70px;
+            top: 60px;
+            width: 43px;
+            height: 43px;
+            background: url(img/icon.png) -150px -43px;
+        }
+        .ban a.prev:hover {
+            background-position: -193px 0;
+        }
+        .ban a.next:hover {
+            background-position: -193px -43px;
+        }
+        .ban ul {
+            overflow: hidden;
+        }
+        .ban ul li {
+            float: left;
+            width: 330px;
+        }
+        .ban ul li:nth-child(2) {
+            text-align: center;
+        }
+        .ban ul li:last-child {
+            text-align: right;
+        }
+        .ban ul li.ban_img1 {
+            text-align: left;
+        }
+        .ban ul li.ban_img2 {
+            text-align: center;
+        }
+        .ban ul li.ban_img3 {
+            text-align: right;
+        }
+        .ban ul li img {
+            border: 4px solid #dcdcdc;
+        }
+        .ban ul li img:hover {
+            border-color: #98bcdc;
+        }
+
+        /* 컨텐츠 */
+        .cont {
+            margin-top: 30px;
+            overflow: hidden;
+        }
+        .cont .column {
+            position: relative;
+            float: left;
+            width: 289px;
+            height: 363px;
+            margin: 0 30px 30px 0;
+            padding-right: 30px;
+        }
+        .cont .col1 {
+            border-right: 1px solid #c8c8c8;
+        }
+        .cont .col2 {
+            border-right: 1px solid #c8c8c8;
+        }
+        .cont .col3 {
+            margin-right: 0;
+            padding-right: 0;
+        }
+        .cont .col4 {
+            border-right: 1px solid #c8c8c8;
+        }
+        .cont .col5 {
+            border-right: 1px solid #c8c8c8;
+        }
+        .cont .col6 {
+            margin-right: 0;
+            padding-right: 0;
+        }
+        .cont .column .ico_img {
+            display: block;
+            width: 60px;
+            height: 60px;
+            background: url(img/icon.png);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .cont .column .ico_tit {
+            padding-left: 70px;
+            font-size: 16px;
+            color: #2c94c4;
+        }
+        .cont .column .ico_desc {
+            padding-left: 70px;
+            border-bottom: 1px solid #d0d0d0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .cont .col1 .ico_img {
+            background-position: 0px -240px;
+        }
+        .cont .col2 .ico_img {
+            background-position: 0px -300px;
+        }
+        .cont .col3 .ico_img {
+            background-position: 0px -360px;
+        }
+        .cont .col4 .ico_img {
+            background-position: 0px -420px;
+        }
+        .cont .col5 .ico_img {
+            background-position: 0px -480px;
+        }
+        .cont .col6 .ico_img {
+            background-position: 0px -540px;
+        }
+        .cont .col1 .ico_img:hover {
+            background-position: -60px -240px;
+        }
+        .cont .col2 .ico_img:hover {
+            background-position: -60px -300px;
+        }
+        .cont .col3 .ico_img:hover {
+            background-position: -60px -360px;
+        }
+        .cont .col4 .ico_img:hover {
+            background-position: -60px -420px;
+        }
+        .cont .col5 .ico_img:hover {
+            background-position: -60px -480px;
+        }
+        .cont .col6 .ico_img:hover {
+            background-position: -60px -540px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+            <div class="container">
+                <div class="header">
+                    <div class="header-menu">
+                        <a href="#">Designer</a>
+                        <a href="#">Publisher</a>
+                        <a href="#">Youtube</a>
+                    </div>
+                    <div class="header-tit">
+                        <h1>Professional Publisher & Designer</h1><br>
+                        <a href="#">webstoryboy.co.kr</a>
+                    </div>
+                    <div class="header-icon">
+                        <a href="#" class="icon1"><span class="ir_pm">icon1</span></a>
+                        <a href="#" class="icon2"><span class="ir_pm">icon2</span></a>
+                        <a href="#" class="icon3"><span class="ir_pm">icon3</span></a>
+                        <a href="#" class="icon4"><span class="ir_pm">icon4</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cont_tit">
+            <div class="container">
+                <div class="tit">
+                    <h2>"나는 퍼블리셔다!"</h2>
+                    <a href="#" class="btn"><span class="ir_pm">전체메뉴</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div id="cont_ban">
+            <div class="container">
+                <div class="ban">
+                    <a href="#" class="prev"><span class="ir_pm">이전 이미지</span></a>
+                    <ul>
+                        <li class="ban_img1"><a href="#"><img src="img/banner_link1.jpg" alt="웹 표준 지침서 보기"></a></li>
+                        <li class="ban_img2"><a href="#"><img src="img/banner_link2.jpg" alt="CSS 버튼 만들기"></a></li>
+                        <li class="ban_img3"><a href="#"><img src="img/banner_link3.jpg" alt="로그인 폼 만들기"></a></li>
+                    </ul>
+                    <a href="#" class="next""><span class="ir_pm">다음 이미지</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="cont_cont">
+            <div class="container">
+                <div class="cont">
+                    <div class="column col1">
+                        <h3><span class="ico_img ir_pm">아이콘1</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                    <div class="column col2">
+                        <h3><span class="ico_img ir_pm">아이콘2</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                    <div class="column col3">
+                        <h3><span class="ico_img ir_pm">아이콘3</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                    <div class="column col4">
+                        <h3><span class="ico_img ir_pm">아이콘4</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                    <div class="column col5">
+                        <h3><span class="ico_img ir_pm">아이콘5</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                    <div class="column col6">
+                        <h3><span class="ico_img ir_pm">아이콘6</span><em class="ico_tit">Notice</em></h3>
+                        <p class="ico_desc">가장 웹 페이지에서 기본이 되는 게시판 유형입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer">
+            <div class="container">footer</div>
+        </div>
+    </div>
+</body>
+</html>
