@@ -42,12 +42,22 @@ cursor.execute('''
     )
 ''')
 
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS EXCEPTION (
+        기준일자 TEXT,
+        공항 TEXT
+    )
+''')
+
 
 # In[67]:
 
+# delay
+delay = 0.5
 
 # year
 year = int(sys.argv[1])
+
 
 # column name
 # column_name = ['기준일자', '공항', '항공사', '편명', '목적지', '계획', '예상', '출발', '구분', '현황', '비정상원인', '비고']
@@ -68,8 +78,10 @@ while(date <= end_date):
 
 # loop(filtering)
 cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM AIRPORT')
-loop = list(set([(date, port) for date in dates for port in ports]) - set(cursor.fetchall()))
-
+loop = set([(date, port) for date in dates for port in ports]) - set(cursor.fetchall())
+cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM EXCEPTION')
+loop = list(loop - set(cursor.fetchall()))
+print('{:,.0f}번의 수집을 시도합니다. (딜레이: {}초)'.format(len(loop), delay))
 
 # In[68]:
 
@@ -84,6 +96,7 @@ driver = webdriver.Chrome('chromedriver', options=options)
 
 
 data = []
+exceptions = []
 log = ''
 try:
     for date, port in loop:
@@ -95,12 +108,13 @@ try:
         '''.format(date))
         Select(driver.find_element_by_css_selector('select[name="airport"]')).select_by_visible_text(port)
         driver.execute_script('go_search()')
-        time.sleep(1.5)
+        time.sleep(delay)
         driver.switch_to.frame(driver.find_element_by_tag_name('iframe'))
 
         rows = driver.find_elements_by_tag_name('table')[1].find_elements_by_tag_name('tr')
         bulk = []
         if len(rows) == 4:
+            exceptions.append([date, port])
             text = '[{}, {}] 검색된 결과가 없습니다.'.format(date, port)
             print(text)
             log += text + '\n'
@@ -114,7 +128,9 @@ try:
             print(text)
             log += text + '\n'
 except:
+    print('수집: {}개, 무효: {:,.0f}개'.format(len(data), len(exceptions)))
     cursor.executemany('INSERT INTO AIRPORT VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', data)
+    cursor.executemany('INSERT INTO EXCEPTION VALUES (?, ?)', exceptions)
     conn.commit()
     conn.close()
     
