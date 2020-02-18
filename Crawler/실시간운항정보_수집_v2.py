@@ -128,7 +128,7 @@ try:
             print(text)
             log += text + '\n'
 except:
-    print('수집: {}개, 무효: {:,.0f}개'.format(len(data), len(exceptions)))
+    print('수집: {:,.0f}개, 무효: {:,.0f}개'.format(len(data), len(exceptions)))
     cursor.executemany('INSERT INTO AIRPORT VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', data)
     cursor.executemany('INSERT INTO EXCEPTION VALUES (?, ?)', exceptions)
     conn.commit()
