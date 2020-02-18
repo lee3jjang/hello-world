@@ -96,7 +96,7 @@ cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM AIRPORT')
 loop = set([(date, port) for date in dates for port in ports]) - set(cursor.fetchall())
 cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM EXCEPTION')
 loop = list(loop - set(cursor.fetchall()))
-print('{:,.0f}번의 수집을 시도합니다. (기준년도: {}, 분기(반기): {}, 딜레이: {}초)'.format(len(loop), year, quarter, delay))
+print('{:,.0f}번의 수집을 시도합니다. (기준년도: {}, 분기(반기): {}, 딜레이: {}초)'.format(len(loop), year, div, delay))
 
 # In[68]:
 
