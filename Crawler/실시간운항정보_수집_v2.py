@@ -115,7 +115,7 @@ try:
         bulk = []
         if len(rows) == 4:
             exceptions.append([date, port])
-            text = '[{}, {}] 검색된 결과가 없습니다.'.format(date, port)
+            text = '[{}, {}]  검색된 결과가 없습니다.'.format(date, port)
             print(text)
             log += text + '\n'
         else:
