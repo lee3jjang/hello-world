@@ -81,6 +81,8 @@ elif div == '1H':
     start_month, end_month = 1, 6
 elif div == '2H':
     start_month, end_month = 7, 12
+elif div == '1Y':
+    start_month, end_month = 1, 12
 else:
     raise Exception('분기 혹은 반기를 다시 입력해주세요.')
     
