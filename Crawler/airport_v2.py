@@ -57,7 +57,7 @@ delay = 0.5
 
 # year, quarter
 year = int(sys.argv[1])
-quarter = sys.argv[2]
+div = sys.argv[2]
 
 # column name
 # column_name = ['기준일자', '공항', '항공사', '편명', '목적지', '계획', '예상', '출발', '구분', '현황', '비정상원인', '비고']
@@ -69,16 +69,20 @@ ports = ['김포', '청주', '양양', '군산', '원주', '김해', '제주', '
 
 # dates
 dates = []
-if quarter == '1Q':
+if div == '1Q':
     start_month, end_month = 1, 3
-elif quarter == '2Q':
+elif div == '2Q':
     start_month, end_month = 4, 6
-elif quarter == '3Q':
+elif div == '3Q':
     start_month, end_month = 7, 9
-elif quarter == '4Q':
+elif div == '4Q':
     start_month, end_month = 10, 12
+elif div == '1H':
+    start_month, end_month = 1, 6
+elif div == '2H':
+    start_month, end_month = 7, 12
 else:
-    raise Exception('분기를 다시 입력해주세요.')
+    raise Exception('분기 혹은 반기를 다시 입력해주세요.')
     
 start_date = datetime(year, start_month, 1)
 end_date = datetime(year, end_month, 1) + relativedelta(months=1) - relativedelta(days=1)
@@ -92,7 +96,7 @@ cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM AIRPORT')
 loop = set([(date, port) for date in dates for port in ports]) - set(cursor.fetchall())
 cursor.execute('SELECT DISTINCT 기준일자, 공항 FROM EXCEPTION')
 loop = list(loop - set(cursor.fetchall()))
-print('{:,.0f}번의 수집을 시도합니다. (기준년도: {}, 분기: {}, 딜레이: {}초)'.format(len(loop), year, quarter, delay))
+print('{:,.0f}번의 수집을 시도합니다. (기준년도: {}, 분기(반기): {}, 딜레이: {}초)'.format(len(loop), year, quarter, delay))
 
 # In[68]:
 
