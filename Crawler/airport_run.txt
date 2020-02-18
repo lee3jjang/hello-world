@@ -1,0 +1,24 @@
+python C:\Users\Administrator\dev\airport_v2.py 2015 1Q
+python C:\Users\Administrator\dev\airport_v2.py 2015 2Q
+python C:\Users\Administrator\dev\airport_v2.py 2015 3Q
+python C:\Users\Administrator\dev\airport_v2.py 2015 4Q
+
+python C:\Users\Administrator\dev\airport_v2.py 2016 1Q
+python C:\Users\Administrator\dev\airport_v2.py 2016 2Q
+python C:\Users\Administrator\dev\airport_v2.py 2016 3Q
+python C:\Users\Administrator\dev\airport_v2.py 2016 4Q
+
+python C:\Users\Administrator\dev\airport_v2.py 2017 1Q
+python C:\Users\Administrator\dev\airport_v2.py 2017 2Q
+python C:\Users\Administrator\dev\airport_v2.py 2017 3Q
+python C:\Users\Administrator\dev\airport_v2.py 2017 4Q
+
+python C:\Users\Administrator\dev\airport_v2.py 2018 1Q
+python C:\Users\Administrator\dev\airport_v2.py 2018 2Q
+python C:\Users\Administrator\dev\airport_v2.py 2018 3Q
+python C:\Users\Administrator\dev\airport_v2.py 2018 4Q
+
+python C:\Users\Administrator\dev\airport_v2.py 2019 1Q
+python C:\Users\Administrator\dev\airport_v2.py 2019 2Q
+python C:\Users\Administrator\dev\airport_v2.py 2019 3Q
+python C:\Users\Administrator\dev\airport_v2.py 2019 4Q
