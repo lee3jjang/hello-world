@@ -39,9 +39,9 @@ code_list = {
 if __name__ == '__main__':
     name = sys.argv[1]
     code = code_list.get(name)
-    now = datetime.now().strftime('%Y%m%d%H%M%S')
     flag = True
     while(True):
+        now = datetime.now().strftime('%Y%m%d%H%M%S')
         get_stock_price(code, now, flag)
         time.sleep(60)
         if flag:
