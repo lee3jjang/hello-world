@@ -1,0 +1,3 @@
+foo=Hello
+bar=World
+echo -- child1 end...
