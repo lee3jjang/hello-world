@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Index</title>
+</head>
+<body>
+    <h1>폼 예제</h1>
+    <form action="/form" method="post">
+        <p>
+            <strong>아이디</strong>
+            <input type="text" name="id" value="아이디 입력">
+        </p>
+        <p>
+            <strong>비밀번호</strong>
+            <input type="password" name="pwd" value="비밀번호 입력">
+
+        </p>
+        <p>
+            <strong>성별</strong>
+            <input type="radio" name="gender" value="M">남자
+            <input type="radio" name="gender" value="F">여자
+        </p>
+        <p>
+            <strong>응시분야</strong>
+            <input type="checkbox" name="part" value="eng">영어
+            <input type="checkbox" name="part" value="math" checked>수학
+        </p>
+        <p>
+            <strong>경로</strong>
+            <select name="path">
+                <option value="ktx">KTX</option>
+                <option value="itx" selected>ITX 새마을</option>
+                <option value="mugunghwa">무궁화호</option>
+            </select>
+        </p>
+        <p>
+            <strong>표 개수</strong>
+            <input type="number" name="ticket" value="3" min="1" max="10">
+        </p>
+        <p>
+            <strong>가격</strong>
+            <input type="range" name="price" value="2000" min="1000" max="5000">
+        </p>
+        <p>
+            <input type="submit" value="제출">
+        </p>
+    </form>
+
+    <!-- <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" width="500" height="400"></iframe> -->
+    <canvas id="ex" width="600" height="400" style="border:1px solid red;"
+        onmousedown="doSomething()"></canvas>
+
+    <script>
+        var c = document.getElementById('ex');
+        var ctx = c.getContext('2d');
+        ctx.moveTo(0, 0);
+        ctx.lineTo(200, 100);
+        ctx.stroke();
+
+        function doSomething() {
+            if (!event) {
+                var event = window.event;
+            }
+            console.log(event.pageX);
+            console.log(event.pageY);
+        }
+
+        var rect = c.getBoundingClientRect();
+        console.log(rect.top);
+        console.log(rect.bottom);
+        console.log(rect.left);
+        console.log(rect.right);
+        console.log(rect.height);
+        console.log(rect.width);
+    </script>
+</body>
+</html>

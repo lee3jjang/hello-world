@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border: 1px solid green;
+            border-collapse: collapse;
+            /* border-spacing: 0px; */
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table border="1" bordercolor="blue" width="500" height="300" align="center">
+        <caption>테이블 제목</caption>
+        <thead>
+            <th colspan="2">테이블</th>
+            <th>만들기</th>
+        </thead>
+        <tbody>
+            {% for i in range(rows) %}
+            <tr align="center" bgcolor="skyblue">
+                <td colspan="2">{{ i }}</td>
+                <td rowspan="1">{{ i+2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <td colspan="3">Table Foot</td>
+        </tfoot>
+    </table>
+</body>
+</html>
