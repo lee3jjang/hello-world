@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drop-down Menu design - Easy Tutorials</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url('img/background.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: sans-serif;
+            /* background-repeat: no-repeat; */
+        }
+
+        .menu-bar {
+            background: rgb(0, 100, 0);
+            text-align: center;
+        }
+
+        .menu-bar ul {
+            display: inline-flex;
+            list-style: none;
+            color: #fff;
+        }
+
+        .menu-bar ul li {
+            width: 120px;
+            margin: 15px;
+            padding: 15px;
+        }
+
+        .menu-bar ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .active,
+        .menu-bar ul li:hover {
+            background: #2bab0d;
+            border-radius: 3px;
+        }
+
+        .menu-bar .fa {
+            margin-right: 8px;
+        }
+
+        .sub-menu-1 {
+            display: none;
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 {
+            display: block;
+            position: absolute;
+            background: rgb(0, 100, 0);
+            margin-top: 15px;
+            margin-left: -15px;
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul {
+            display: block;
+            margin: 10px;
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul li {
+            width: 150px;
+            padding: 10px;
+            border-bottom: 1px dotted #fff;
+            background: transparent;
+            text-align: left;
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul li:last-child {
+            border-bottom: none;
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul li a:hover {
+            color: #b2ff00;
+        }
+
+        .fa-angle-right {
+            float: right;
+        }
+
+        .sub-menu-2 {
+            display: none;
+        }
+
+        .hover-me:hover .sub-menu-2 {
+            position: absolute;
+            display: block;
+            margin-top: -40px;
+            margin-left: 140px;
+            background: rgb(0, 100, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-bar">
+        <ul>
+            <li class="active"><i class="fa fa-home"></i><a href="#">Home</a></li>
+            <li><i class="fa fa-user"></i><a href="#">About us</a>
+                <div class="sub-menu-1">
+                    <ul>
+                        <li><a href="#">Mission</a></li>
+                        <li><a href="#">Vision</a></li>
+                        <li><a href="#">Team</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><i class="fa fa-clone"></i><a href="#">Services</a>
+                <div class="sub-menu-1">
+                    <ul>
+                        <li><a href="#">Web Designing</a></li>
+                        <li class="hover-me"><a href="#">Marketing</a><i class="fa fa-angle-right"></i>
+                            <div class="sub-menu-2">
+                                <ul>
+                                    <li><a href="#">SEO</a></li>
+                                    <li><a href="#">Social Media</a></li>
+                                    <li><a href="#">Emial Marketing</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="hover-me"><a href="#">Mobile App</a><i class="fa fa-angle-right"></i>
+                            <div class="sub-menu-2">
+                                <ul>
+                                    <li><a href="#">Android App</a></li>
+                                    <li><a href="#">iOs</a></li>
+                                    <li><a href="#">Ionic App</a></li>
+                                    <li><a href="#">Flutter App</a></li>
+                                    <li><a href="#">Unity App</a></li>
+                                </ul>
+                            </div></li>
+                    </ul>
+                </div>
+            </li>
+            <li><i class="fa fa-users"></i><a href="#">Clients</a></li>
+            <li><i class="fa fa-angellist"></i><a href="#">Investers</a></li>
+            <li><i class="fa fa-inr"></i><a href="#">Pricing</a></li>
+            <li><i class="fa fa-edit"></i><a href="#">Training</a></li>
+            <li><i class="fa fa-phone"></i><a href="#">Contact</a></li>
+        </ul>
+    </div>
+
+    
+    
+</body>
+</html>
