@@ -22,3 +22,5 @@
  > 1) varname::class.simpleName  
  > 2) varname::class.qualifiedName
  - [data class](https://kychul98.tistory.com/92)
+ - 코드 줄 이동 : alt + shift + ↑, ↓
+ - 코드 복제 : ctrl + d
