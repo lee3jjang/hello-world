@@ -1,4 +1,1 @@
-# Hello Everybody!
-# This is my lab for practicing python and R
-# I use python for web scrapping, handling rasberry pi, image processing, analysis, visualization and so on.
-# I also use R for analysis and visualizaion.
+* [안드로이드와 깃허브 연동하기](https://devmingsa.tistory.com/7)
