@@ -17,3 +17,4 @@
 ```
 
  - 단위테스트 : 폴더 하나 만듬 -> 폴더 안에다 class 들을 만듬 -> 각 class의 method에 테스트할 method 코드를 작성 -> method 위에 `@Text` annotation 붙임 -> 폴더 run(ctrl + shift + F10)
+ - 치환 : ctrl + shift + r
