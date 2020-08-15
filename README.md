@@ -27,3 +27,4 @@
  - 코드 1줄 삭제 : ctrl + y
  - 탭 닫기 : ctrl + F4
  - 탭 이동 : ctrl + tab
+ - [안드로이드 액티비티 생명주기](https://thinkground.studio/android-%EC%95%A1%ED%8B%B0%EB%B9%84%ED%8B%B0-%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0-activity-lifecycle/)
