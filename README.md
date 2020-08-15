@@ -21,3 +21,4 @@
  - 변수의 클래스명 :
  > 1) varname::class.simpleName  
  > 2) varname::class.qualifiedName
+ - [data class](https://kychul98.tistory.com/92)
