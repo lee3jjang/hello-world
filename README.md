@@ -26,3 +26,4 @@
  - 코드 복제 : ctrl + d
  - 코드 1줄 삭제 : ctrl + y
  - 탭 닫기 : ctrl + F4
+ - 탭 이동 : ctrl + tab
