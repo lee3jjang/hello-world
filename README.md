@@ -32,3 +32,5 @@
  - [open 키워드](https://androidtest.tistory.com/102)
  - setter, getter : alt + insert
  - [AVD S10 스킨](https://csc0705.tistory.com/60)
+ - [VSCode에서 코틀린](https://ebbnflow.tistory.com/157)
+   * [컴파일러](https://github.com/JetBrains/kotlin/releases/tag/v1.4.0)
