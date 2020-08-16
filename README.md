@@ -30,3 +30,4 @@
  - [안드로이드 액티비티 생명주기](https://thinkground.studio/android-%EC%95%A1%ED%8B%B0%EB%B9%84%ED%8B%B0-%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0-activity-lifecycle/)
  - [companion object](https://www.androidhuman.com/lecture/kotlin/2016/07/10/kotlin_companion_object/)
  - [open 키워드](https://androidtest.tistory.com/102)
+ - setter, getter : alt + insert
