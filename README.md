@@ -31,3 +31,4 @@
  - [companion object](https://www.androidhuman.com/lecture/kotlin/2016/07/10/kotlin_companion_object/)
  - [open 키워드](https://androidtest.tistory.com/102)
  - setter, getter : alt + insert
+ - [AVD S10 스킨](https://csc0705.tistory.com/60)
