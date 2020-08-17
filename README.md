@@ -1,3 +1,6 @@
+## 공통
+ - [화면분할키활성화](https://answers.microsoft.com/ko-kr/windows/forum/windows_10-start-win_desk/%EC%9C%88%EB%8F%84%EC%9A%B010/4f1776b3-d911-4bc8-b71a-2598be927b51)
+
 ## 안드로이드 스튜디오
  - [깃허브 연동하기](https://devmingsa.tistory.com/7)
  - [깃허브에서 프로젝트 가져오기](https://copycoding.tistory.com/81)
