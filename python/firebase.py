@@ -1,20 +1,32 @@
-import pyrebase
+import firebase_admin
+from firebase_admin import credentials, db
 
-config = dict(
-    apiKey="AIzaSyDaA0rzHpSLVAdgHgHI9cww8KBL_Z2EqCY",
-    authDomain="vid-6b660.firebaseapp.com",
-    databaseURL="https=//vid-6b660.firebaseio.com",
-    projectId="vid-6b660",
-    storageBucket="vid-6b660.appspot.com",
-    messagingSenderId="1039428669667",
-    appId="1:1039428669667:web:9506164aa09c11fcf375d6",
-    measurementId="G-R88KGB9491"
-)
+cred = credentials.Certificate('service-account-file.json')
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://vid-6b660.firebaseio.com/'
+})
 
-firebase = pyrebase.initialize_app(config)
-storage = firebase.storage()
-path_on_cloud = 'images/foo.jpg'
-path_local = 'img/img_5terre.jpg'
-storage.child(path_on_cloud).put(path_local)
+ref = db.reference()
+ref.update({'반원': '고슴도치'})
 
-storage.child(path_on_cloud).download('.', 'test_down.jpg')
+ref = db.reference('강좌/파이썬')
+ref.update({'파이썬 레시피 웹 활용': 'complete'})
+ref.update({'파이썬 괴식 레시피': 'proceeding'})
+
+ref = db.reference()
+ref.update({'수강자': ['구독자A','구독자B','구독자C','구독자D']})
+
+ref = db.reference('없는 경로')
+print(ref.get())
+
+ref = db.reference('반원')
+print(ref.get())
+
+ref = db.reference('강좌/파이썬')
+print(ref.get())
+
+ref = db.reference('강좌')
+print(ref.get())
+
+ref = db.reference('수강자')
+print(ref.get())
