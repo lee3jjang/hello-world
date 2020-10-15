@@ -1,0 +1,52 @@
+<BoardScreen@Screen>
+    name: 'board'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'Daum Cafe'
+            right_action_items: [['menu', lambda x: x]]
+
+        ScrollView:
+            MDList:
+                id: board_list
+
+        MDBottomNavigation:
+            panel_color: .2, .2, .2, 1
+
+            MDBottomNavigationItem:
+                name: 'screen 1'
+                text: 'Python'
+                icon: 'language-python'
+
+            MDBottomNavigationItem:
+                name: 'screen 2'
+                text: 'C++'
+                icon: 'language-cpp'
+
+            MDBottomNavigationItem:
+                name: 'screen 3'
+                text: 'JS'
+                icon: 'language-javascript'
+
+<Board>
+    on_release:
+        print("Hello Board")
+
+    IconLeftWidget:
+        icon: root.icon
+
+    RightRoundedButton:
+        text: root.comments
+
+<RightRoundedButton>
+    color: 0, 0, 0, 1
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [100]
+    on_release: print("Hello RightRoundedButton")
