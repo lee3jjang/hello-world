@@ -1,13 +1,14 @@
-import socket
+from socket import *
 
-HOST = 'localhost'
-PORT = 9009
+client_sock = socket(AF_INET, SOCK_STREAM)
+client_sock.connect(('127.0.0.1', 8080))
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-    sock.connect((HOST, PORT))
-    msg = []
-    while msg!='q':
-        msg = input("메시지 입력:")
-        sock.sendall(msg.encode())
-        data = sock.recv(1024)
-        print("에코서버로부터 받은 데이터 [%s]" % data.decode())
+print('연결 확인 됐습니다.')
+
+while True:
+    question = input('질문하세요: ')
+    client_sock.send(question.encode('utf-8'))
+    print('메시지를 전송했습니다.')
+
+    data = client_sock.recv(1024)
+    print(f'받은 데이터: {data.decode("utf-8")}')
