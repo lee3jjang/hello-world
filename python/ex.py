@@ -38,13 +38,14 @@ def main():
     fig = make_subplots(rows=1, cols=1, shared_xaxes=True)
     fig.add_trace(go.Scatter(
         x=x, y=y,
-        marker=dict(size=10, line=dict(width=1, color='#323232')),
+        marker=dict(size=10, symbol='square', color=low_c, line=dict(width=1, color='#323232')),
         line=dict(width=4, dash='dot'),
-        marker_color=low_c, name='sin(x)', mode='lines+markers'
+        name='sin(x)', mode='lines+markers'
     ))
     fig.add_trace(go.Scatter(
-        x=x, y=y2, marker=dict(size=10, line=dict(width=1, color='#323232')),
-        marker_color=high_c, name='cos(x)', mode='markers',
+        x=x, y=y2,
+        marker=dict(size=10, symbol='cross', color=high_c, line=dict(width=1, color='#323232')),
+        name='cos(x)', mode='markers',
     ))
     fig.update_traces(
         hovertemplate=hovertemplate,
