@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup_requires = []
 
 install_requires = [
-    'django==2.2.13'
+    'django==2.2.22'
     ]
 
 dependency_links = [
